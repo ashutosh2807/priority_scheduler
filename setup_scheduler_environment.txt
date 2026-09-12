@@ -1,0 +1,29 @@
+@echo off
+setlocal EnableExtensions
+
+REM One-time workstation setup for the scheduler worker and Django portal.
+REM It never stores Oracle credentials; configure those in scheduler_project\.env
+REM through the approved SBI secret mechanism before starting the worker.
+cd /d "%~dp0"
+
+if not exist "%~dp0.scheduler-venv\Scripts\python.exe" (
+    py -3 -m venv "%~dp0.scheduler-venv"
+    if errorlevel 1 (
+        echo Python 3 could not create .scheduler-venv. Install approved Python first.
+        exit /b 1
+    )
+)
+
+"%~dp0.scheduler-venv\Scripts\python.exe" -m pip install --upgrade pip
+if errorlevel 1 exit /b %ERRORLEVEL%
+"%~dp0.scheduler-venv\Scripts\python.exe" -m pip install -r "%~dp0scheduler_project\requirements.txt" -r "%~dp0scheduler_web\requirements.txt"
+if errorlevel 1 exit /b %ERRORLEVEL%
+
+pushd "%~dp0scheduler_web"
+"%~dp0.scheduler-venv\Scripts\python.exe" manage.py migrate --noinput
+set "MIGRATE_EXIT=%ERRORLEVEL%"
+popd
+
+if not "%MIGRATE_EXIT%"=="0" exit /b %MIGRATE_EXIT%
+echo Setup complete. Configure scheduler_project\.env, then use scheduler_project\run_scheduler_service.bat and run_portal.bat.
+exit /b 0

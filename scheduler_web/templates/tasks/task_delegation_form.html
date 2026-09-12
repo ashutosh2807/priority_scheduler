@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Create Delegation
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-1">Create Delegation</h1>
+            <p class="text-muted mb-0">
+                Delegate responsibility for {{ task.name }}
+            </p>
+        </div>
+
+        <a
+            href="{% url 'tasks:detail' task.pk %}"
+            class="btn btn-outline-secondary"
+        >
+            Back to Task
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+
+        <div class="card-header">
+            <strong>Delegation Details</strong>
+        </div>
+
+        <div class="card-body">
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <form method="post" novalidate>
+
+                {% csrf_token %}
+
+                {% for field in form %}
+
+                    <div class="mb-3">
+
+                        {% if field.field.widget.input_type == "checkbox" %}
+
+                            <div class="form-check">
+                                {{ field }}
+
+                                <label
+                                    class="form-check-label"
+                                    for="{{ field.id_for_label }}"
+                                >
+                                    {{ field.label }}
+                                </label>
+                            </div>
+
+                        {% else %}
+
+                            <label
+                                for="{{ field.id_for_label }}"
+                                class="form-label"
+                            >
+                                {{ field.label }}
+                            </label>
+
+                            {{ field }}
+
+                        {% endif %}
+
+                        {% if field.help_text %}
+                            <div class="form-text">
+                                {{ field.help_text }}
+                            </div>
+                        {% endif %}
+
+                        {% if field.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ field.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                {% endfor %}
+
+                <div class="d-flex gap-2">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        Create Delegation
+                    </button>
+
+                    <a
+                        href="{% url 'tasks:detail' task.pk %}"
+                        class="btn btn-outline-secondary"
+                    >
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

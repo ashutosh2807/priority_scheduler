@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}{% if schedule %}Edit {{ schedule.name }}{% else %}Add schedule{% endif %}{% endblock %}
+{% block content %}
+<div class="definition-workspace">
+  <header class="definition-page-header">
+    <a class="definition-back" href="{% if schedule %}{% url 'scheduler:detail' schedule.id %}{% else %}{% url 'scheduler:jobs' %}{% endif %}"><i class="bi bi-arrow-left" aria-hidden="true"></i>{% if schedule %}Back to schedule{% else %}Back to schedules{% endif %}</a>
+    <div class="definition-heading-row">
+      <div><div class="page-eyebrow">ITRP schedule management</div><h1 class="page-title">{% if schedule %}Edit schedule{% else %}Add schedule{% endif %}</h1><p class="page-subtitle">{% if schedule %}Update the operating rules for <strong>{{ schedule.name }}</strong>.{% else %}Define a task, its operating calendar and the people responsible.{% endif %}</p></div>
+      <span class="definition-access"><i class="bi bi-shield-check" aria-hidden="true"></i>{% if scheduler.master_source == 'oracle' %}Saves to Oracle{% elif scheduler.master_source == 'file' %}Development source{% else %}SUPERUSER workspace{% endif %}</span>
+    </div>
+  </header>
+  {% if not configuration_available %}<div class="alert alert-warning" role="alert"><i class="bi bi-plug me-2" aria-hidden="true"></i>The scheduler is disconnected. Reconnect it before saving a schedule.</div>{% endif %}
+  <form method="post" data-disable-on-submit class="definition-form">
+    {% csrf_token %}
+    {% if form.errors %}
+    <div class="definition-error-summary" role="alert" aria-labelledby="definition-errors-title" tabindex="-1">
+      <h2 id="definition-errors-title"><i class="bi bi-exclamation-circle" aria-hidden="true"></i>Review the highlighted fields</h2>
+      {% if form.non_field_errors %}{{ form.non_field_errors }}{% endif %}
+      <ul>{% for field in form %}{% if field.errors %}<li><a href="#{{ field.id_for_label|default:field.auto_id }}">{{ field.label }}: {{ field.errors|first }}</a></li>{% endif %}{% endfor %}</ul>
+    </div>
+    {% endif %}
+    <div class="definition-layout">
+      <div class="definition-sections">
+        <section class="card definition-section" id="definition-details" aria-labelledby="definition-details-title">
+          <div class="definition-section-heading"><span class="definition-section-number" aria-hidden="true">01</span><div><h2 id="definition-details-title">Schedule details</h2><p>Give the task a clear name and link its Oracle procedure.</p></div></div>
+          <div class="definition-section-body">
+            <div class="row g-4"><div class="col-sm-4">{% include "scheduler/_definition_field.html" with field=form.schedule_id %}</div><div class="col-sm-8">{% include "scheduler/_definition_field.html" with field=form.name %}</div><div class="col-12">{% include "scheduler/_definition_field.html" with field=form.package_name %}</div></div>
+            <div class="definition-toggle-row mt-4"><div><label class="form-label mb-1" for="{{ form.is_active.id_for_label }}">{{ form.is_active.label }}</label><p id="{{ form.is_active.auto_id }}_helptext">Enable future scheduled occurrences. Clear this to keep the schedule inactive.</p></div><div class="form-check form-switch">{{ form.is_active }}</div></div>
+          </div>
+        </section>
+        <section class="card definition-section" id="definition-calendar" aria-labelledby="definition-calendar-title">
+          <div class="definition-section-heading"><span class="definition-section-number" aria-hidden="true">02</span><div><h2 id="definition-calendar-title">Calendar &amp; frequency</h2><p>Choose the recurrence and how working days affect execution.</p></div></div>
+          <div class="definition-section-body">
+            <fieldset class="definition-field {% if form.frequencies.errors %}definition-field-invalid{% endif %}" aria-describedby="{{ form.frequencies.auto_id }}_helptext{% if form.frequencies.errors %} {{ form.frequencies.auto_id }}_error{% endif %}">
+              <legend class="form-label">{{ form.frequencies.label }} <span class="definition-required" aria-hidden="true">*</span></legend>
+              <div class="definition-frequency-grid" id="{{ form.frequencies.auto_id }}">
+                {% for choice in form.frequencies %}<label class="definition-frequency-choice" for="{{ choice.id_for_label }}">{{ choice.tag }}<span><strong>{{ choice.choice_label }}</strong><small>{% if choice.data.value == 'DAILY' %}Each working day{% elif choice.data.value == 'WEEKLY' %}Last working day{% elif choice.data.value == 'FORTNIGHTLY' %}15th &amp; month end{% elif choice.data.value == 'MONTHLY' %}Month end{% elif choice.data.value == 'QUARTERLY' %}Quarter end{% elif choice.data.value == 'HALF-YEARLY' %}30 Sep &amp; 31 Mar{% elif choice.data.value == 'ANNUALLY' %}31 March{% else %}Choose exact dates{% endif %}</small></span></label>{% endfor %}
+              </div>
+              <div class="form-text" id="{{ form.frequencies.auto_id }}_helptext">Select one or more frequencies. The banking calendar determines working days.</div>
+              {% if form.frequencies.errors %}<div class="invalid-feedback d-block" id="{{ form.frequencies.auto_id }}_error">{% for error in form.frequencies.errors %}<div>{{ error }}</div>{% endfor %}</div>{% endif %}
+            </fieldset>
+            <div class="row g-4 mt-1"><div class="col-sm-8">{% include "scheduler/_definition_field.html" with field=form.specific_dates %}</div><div class="col-sm-4">{% include "scheduler/_definition_field.html" with field=form.margin %}</div></div>
+            <div class="definition-toggle-row mt-4"><div><label class="form-label mb-1" for="{{ form.same_day.id_for_label }}">{{ form.same_day.label }}</label><p id="{{ form.same_day.auto_id }}_helptext">{{ form.same_day.help_text }}</p></div><div class="form-check form-switch">{{ form.same_day }}</div></div>
+            <fieldset class="definition-holiday-options mt-4" aria-describedby="{{ form.holiday_run.auto_id }}_helptext">
+              <legend class="form-label">{{ form.holiday_run.label }} <span class="definition-optional">Optional</span></legend>
+              <div class="definition-holiday-choices" id="{{ form.holiday_run.auto_id }}">{% for choice in form.holiday_run %}<label for="{{ choice.id_for_label }}">{{ choice.tag }}<span>{{ choice.choice_label }}</span></label>{% endfor %}</div>
+              <div class="form-text" id="{{ form.holiday_run.auto_id }}_helptext">{{ form.holiday_run.help_text }}</div>
+              {% if form.holiday_run.errors %}<div class="invalid-feedback d-block" id="{{ form.holiday_run.auto_id }}_error">{% for error in form.holiday_run.errors %}<div>{{ error }}</div>{% endfor %}</div>{% endif %}
+            </fieldset>
+          </div>
+        </section>
+        <section class="card definition-section" id="definition-execution" aria-labelledby="definition-execution-title">
+          <div class="definition-section-heading"><span class="definition-section-number" aria-hidden="true">03</span><div><h2 id="definition-execution-title">Execution &amp; retries</h2><p>Set the initial execution window and the retry allowance.</p></div></div>
+          <div class="definition-section-body">
+            <div class="definition-window-caption"><i class="bi bi-clock" aria-hidden="true"></i>Execution window <span>Indian Standard Time</span></div>
+            <div class="row g-4"><div class="col-sm-6">{% include "scheduler/_definition_field.html" with field=form.from_time %}</div><div class="col-sm-6">{% include "scheduler/_definition_field.html" with field=form.to_time %}</div></div>
+            <p class="form-text mt-2 mb-4">Leave both times blank for no initial time restriction.</p>
+            <div class="row g-4"><div class="col-sm-6">{% include "scheduler/_definition_field.html" with field=form.max_attempts %}</div><div class="col-sm-6">{% include "scheduler/_definition_field.html" with field=form.expected_minutes %}</div></div>
+            <div class="definition-policy-note mt-4"><i class="bi bi-arrow-repeat" aria-hidden="true"></i><p><strong>Retries stay within the execution day.</strong> Failed runs can retry throughout their planned execution day, up to the attempt limit. Once that day passes, an operator must request a manual run. Confirmation and pause controls continue to apply.</p></div>
+          </div>
+        </section>
+        <section class="card definition-section" id="definition-ownership" aria-labelledby="definition-ownership-title">
+          <div class="definition-section-heading"><span class="definition-section-number" aria-hidden="true">04</span><div><h2 id="definition-ownership-title">Confirmation &amp; operating guide</h2><p>Assign confirmation ownership and document the steps to follow.</p></div></div>
+          <div class="definition-section-body">
+            <div class="definition-toggle-row definition-confirmation-toggle"><div><label class="form-label mb-1" for="{{ form.confirmation_needed.id_for_label }}">{{ form.confirmation_needed.label }}</label><p id="{{ form.confirmation_needed.auto_id }}_helptext">{{ form.confirmation_needed.help_text }}</p></div><div class="form-check form-switch">{{ form.confirmation_needed }}</div></div>
+            <div class="row g-4 mt-1"><div class="col-sm-6">{% include "scheduler/_definition_field.html" with field=form.responsible_operator %}</div><div class="col-sm-6">{% include "scheduler/_definition_field.html" with field=form.backup_operator %}</div></div>
+            <div class="definition-coverage-note"><i class="bi bi-people" aria-hidden="true"></i><p>During approved leave, confirmation goes to the nominated cover, preferred backup or an available operator. The actual confirmer is recorded in the audit log.</p></div>
+            <div class="row g-4"><div class="col-12">{% include "scheduler/_definition_field.html" with field=form.description %}</div><div class="col-12">{% include "scheduler/_definition_field.html" with field=form.operational_steps %}</div></div>
+          </div>
+        </section>
+        <section class="card definition-section" id="definition-save" aria-labelledby="definition-save-title">
+          <div class="definition-section-heading"><span class="definition-section-number" aria-hidden="true">05</span><div><h2 id="definition-save-title">Review &amp; save</h2><p>Record why this schedule is being {% if schedule %}updated{% else %}created{% endif %}.</p></div></div>
+          <div class="definition-section-body">{% include "scheduler/_definition_field.html" with field=form.reason %}</div>
+          <div class="definition-save-bar"><span><i class="bi bi-journal-check" aria-hidden="true"></i>Your change is recorded in the audit log.</span><div><a class="btn btn-light border" href="{% if schedule %}{% url 'scheduler:detail' schedule.id %}{% else %}{% url 'scheduler:jobs' %}{% endif %}">Cancel</a><button type="submit" class="btn btn-primary" {% if not configuration_available %}disabled{% endif %}><i class="bi bi-check2" aria-hidden="true"></i>{% if schedule %}Save schedule{% else %}Create schedule{% endif %}</button></div></div>
+        </section>
+      </div>
+      <aside class="definition-guide" aria-label="Schedule setup guidance">
+        <nav class="definition-section-nav" aria-label="Schedule form sections"><p class="definition-guide-eyebrow">On this form</p><a href="#definition-details"><span>01</span>Schedule details</a><a href="#definition-calendar"><span>02</span>Calendar &amp; frequency</a><a href="#definition-execution"><span>03</span>Execution &amp; retries</a><a href="#definition-ownership"><span>04</span>Confirmation &amp; guide</a><a href="#definition-save"><span>05</span>Review &amp; save</a></nav>
+        <div class="definition-guidance-card"><i class="bi bi-calendar2-check definition-guide-icon" aria-hidden="true"></i><h2>Banking calendar</h2><p>DATEMAST is the source for working dates. It holds data through T−1.</p><p>Second and fourth Saturdays are bank holidays by default.</p><div class="definition-guide-divider"></div><h3>Financial year end</h3><p>Annual schedules close on <strong>31 March</strong>. Half-yearly schedules close on <strong>30 September</strong> and <strong>31 March</strong>.</p></div>
+        <p class="definition-required-note"><span aria-hidden="true">*</span> Required fields<br>Changes take effect after saving.</p>
+      </aside>
+    </div>
+  </form>
+</div>
+{% endblock %}

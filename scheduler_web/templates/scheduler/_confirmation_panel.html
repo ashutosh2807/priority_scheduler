@@ -1,0 +1,20 @@
+<section class="card confirmation-panel mb-4">
+  <div class="card-header d-flex justify-content-between align-items-center"><div><div class="page-eyebrow">Operator gate</div><h2 class="section-heading">Confirmation</h2></div>{% if schedule.confirmation_needed %}<span class="badge badge-soft-warning">Required</span>{% else %}<span class="badge badge-soft-secondary">Not required</span>{% endif %}</div>
+  <div class="card-body">
+    {% if schedule.confirmation_needed %}
+      {% if not controls_available %}
+        <div class="alert alert-warning small mb-0"><i class="bi bi-plug me-1"></i>The background scheduler control API is not connected. Confirmation can be recorded after it is available.</div>
+      {% elif not schedule.can_confirm %}<p class="small mb-0">Confirmation belongs to <strong>{{ schedule.responsibility.operator.display_name|default:"an operator to be assigned" }}</strong>. {{ schedule.responsibility.reason }}</p>
+      {% elif not schedule.occurrence.occurrence_key %}<p class="small mb-0">The worker has no current occurrence to confirm. Refresh after its next evaluation.</p>
+      {% elif schedule.control.confirmation %}
+        <div class="confirmation-status confirmed"><i class="bi bi-check-circle-fill"></i><div><strong>Confirmed for scheduler evaluation</strong><small class="d-block mt-1">The confirmation flag is recorded. The scheduler will use it on the next cycle.</small></div></div>
+        <form method="post" action="{% url 'scheduler:action' schedule.id 'clear_confirmation' %}" class="mt-3">{% csrf_token %}<input type="hidden" name="occurrence_key" value="{{ schedule.occurrence.occurrence_key }}"><button class="btn btn-sm btn-outline-secondary w-100">Clear confirmation</button></form>
+      {% else %}
+        <div class="confirmation-status pending"><i class="bi bi-shield-exclamation"></i><div><strong>Operator confirmation is required</strong><small class="d-block mt-1">Confirm this schedule to allow the scheduler to reevaluate the occurrence. This does not execute Oracle directly.</small></div></div>
+        <form method="post" action="{% url 'scheduler:action' schedule.id 'confirm' %}" class="mt-3" data-confirm="Confirm {{ schedule.name }} for scheduler evaluation?">{% csrf_token %}<input type="hidden" name="occurrence_key" value="{{ schedule.occurrence.occurrence_key }}"><div class="mb-2"><input class="form-control form-control-sm" name="reason" placeholder="Confirmation note (optional)"></div><button class="btn btn-primary w-100"><i class="bi bi-check2-circle me-1"></i>Confirm schedule</button></form>
+      {% endif %}
+    {% else %}
+      <div class="confirmation-status not-required"><i class="bi bi-info-circle"></i><div><strong>No confirmation gate</strong><small class="d-block mt-1">This schedule is evaluated according to its configured dates, time window, and control state.</small></div></div>
+    {% endif %}
+  </div>
+</section>

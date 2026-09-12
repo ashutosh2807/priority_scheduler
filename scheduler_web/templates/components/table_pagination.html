@@ -1,0 +1,24 @@
+{% if table_page.paginator %}
+<div class="table-pagination" id="{{ pagination_anchor }}" data-table-pagination>
+  <p class="table-pagination-summary mb-0">
+    {% if table_page.paginator.count %}Showing <strong>{{ table_page.start_index }}–{{ table_page.end_index }}</strong> of <strong>{{ table_page.paginator.count }}</strong>{% else %}0 records{% endif %}
+  </p>
+  {% if table_page.paginator.num_pages > 1 %}
+  <nav aria-label="{{ pagination_label }} pagination">
+    <ul class="pagination pagination-sm mb-0">
+      <li class="page-item{% if not previous_url %} disabled{% endif %}">
+        {% if previous_url %}<a class="page-link" href="{{ previous_url }}" rel="prev" aria-label="Previous page of {{ pagination_label }}">Previous</a>{% else %}<span class="page-link" aria-disabled="true">Previous</span>{% endif %}
+      </li>
+      {% for item in pagination_links %}
+      <li class="page-item{% if item.current %} active{% elif item.gap %} disabled{% endif %}">
+        {% if item.gap %}<span class="page-link pagination-gap">…</span>{% elif item.current %}<span class="page-link" aria-current="page" aria-label="Page {{ item.number }} of {{ pagination_label }}">{{ item.number }}</span>{% else %}<a class="page-link" href="{{ item.url }}" aria-label="Page {{ item.number }} of {{ pagination_label }}">{{ item.number }}</a>{% endif %}
+      </li>
+      {% endfor %}
+      <li class="page-item{% if not next_url %} disabled{% endif %}">
+        {% if next_url %}<a class="page-link" href="{{ next_url }}" rel="next" aria-label="Next page of {{ pagination_label }}">Next</a>{% else %}<span class="page-link" aria-disabled="true">Next</span>{% endif %}
+      </li>
+    </ul>
+  </nav>
+  {% endif %}
+</div>
+{% endif %}

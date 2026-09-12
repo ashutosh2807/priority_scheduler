@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Limited configuration · {{ schedule.name }}{% endblock %}
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
+  <div>
+    <a href="{% url 'scheduler:detail' schedule.id %}" class="small text-decoration-none"><i class="bi bi-arrow-left me-1"></i>Back to schedule</a>
+    <div class="page-eyebrow mt-2">Worker-owned Schedule Master</div>
+    <h1 class="page-title h2 mb-1">Limited configuration</h1>
+    <p class="page-subtitle">{{ schedule.name }} · update the active state, execution window and automatic-attempt limit through the scheduler worker.</p>
+  </div>
+  <span class="badge badge-soft-primary"><i class="bi bi-shield-lock me-1"></i>SUPERUSER-only change</span>
+</div>
+
+{% if scheduler.error %}<div class="alert alert-warning">{{ scheduler.error }}</div>{% endif %}
+<section class="card master-config-card mb-4">
+  <div class="card-header"><div class="page-eyebrow">Protected boundary</div><h2 class="section-heading fs-5 mb-1">What this page can and cannot change</h2><p class="small text-muted mb-0">The browser never writes Scheduler Master directly. The worker validates, persists, and audits the permitted change.</p></div>
+  <div class="card-body"><div class="row g-3"><div class="col-md-6"><div class="master-config-allowed"><i class="bi bi-check2-circle"></i><div><strong>Allowed here</strong><span>Active / inactive state, execution window and maximum automatic attempts.</span></div></div></div><div class="col-md-6"><div class="master-config-protected"><i class="bi bi-lock"></i><div><strong>Protected by Scheduler Master / Oracle</strong><span>Package, procedure, frequencies, margin, holiday rule, confirmation rule, and specific dates.</span></div></div></div></div></div>
+</section>
+
+{% if configuration_available %}
+  <form method="post" class="card master-config-card" data-disable-on-submit data-confirm="Save the permitted Schedule Master configuration? Active work is not interrupted; future scheduler evaluation will use the worker-approved settings.">
+    {% csrf_token %}
+    <div class="card-body p-4">
+      {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+      <div class="row g-4">
+        <div class="col-12"><div class="page-eyebrow">Current protected definition</div><div class="row g-3 mt-0"><div class="col-md-4"><small class="text-muted d-block text-uppercase fw-bold">Package / procedure</small><strong>{{ schedule.package_name }}</strong></div><div class="col-md-4"><small class="text-muted d-block text-uppercase fw-bold">Frequency</small><strong>{{ schedule.frequencies }}</strong></div><div class="col-md-4"><small class="text-muted d-block text-uppercase fw-bold">Margin / calendar rule</small><strong>{{ schedule.margin }} · {% if schedule.same_day %}Same day{% else %}Next working day{% endif %}</strong></div></div></div>
+        <div class="col-12"><hr class="my-1"></div>
+        <div class="col-12"><div class="page-eyebrow">Permitted worker update</div><h2 class="section-heading fs-5 mb-1">Availability, execution window and attempts</h2><p class="small text-muted mb-0">Leave both time fields blank to remove the time restriction. An end time before a start time is an overnight window.</p></div>
+        <div class="col-md-5"><div class="form-check master-active-check">{{ form.is_active }}<label class="form-check-label fw-semibold" for="{{ form.is_active.id_for_label }}">{{ form.is_active.label }}</label><div class="form-text">{{ form.is_active.help_text }}</div></div>{% for error in form.is_active.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}</div>
+        <div class="col-md-7"><div class="row g-3"><div class="col-sm-6"><label class="form-label" for="{{ form.from_time.id_for_label }}">{{ form.from_time.label }}</label>{{ form.from_time }}{% for error in form.from_time.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}</div><div class="col-sm-6"><label class="form-label" for="{{ form.to_time.id_for_label }}">{{ form.to_time.label }}</label>{{ form.to_time }}{% for error in form.to_time.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}</div></div></div>
+        <div class="col-12"><label class="form-label" for="{{ form.max_attempts.id_for_label }}">{{ form.max_attempts.label }}</label><div class="col-sm-4 col-lg-3">{{ form.max_attempts }}</div>{% for error in form.max_attempts.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}<div class="form-text">{{ form.max_attempts.help_text }}</div><small class="d-block text-muted mt-1">Current limit: {{ schedule.max_attempts }} total automatic attempts. The default is 3.</small></div>
+        <div class="col-12"><label class="form-label" for="{{ form.reason.id_for_label }}">{{ form.reason.label }} <span class="text-muted fw-normal">(optional)</span></label>{{ form.reason }}{% for error in form.reason.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}<div class="form-text">{{ form.reason.help_text }}</div></div>
+      </div>
+    </div>
+    <div class="card-footer d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3"><small class="text-muted"><i class="bi bi-journal-check me-1"></i>The worker and this portal both record the before/after audit.</small><button type="submit" class="btn btn-primary"><i class="bi bi-save2 me-1"></i>Save permitted configuration</button></div>
+  </form>
+{% else %}
+  <section class="card"><div class="card-body"><div class="alert alert-warning mb-0"><i class="bi bi-plug me-1"></i><strong>Configuration is unavailable.</strong> The background scheduler control API must be connected before it can validate and save a Schedule Master change. Nothing can be edited locally from this portal.</div></div></section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,70 @@
+# Copy to .env and supply values through the approved ITRP secret mechanism.
+# Never commit the real .env file.
+
+# Oracle connectivity. ORACLE_DSN takes precedence over host/service/SID.
+# Home: oracledb (Thin mode unless a client directory is supplied).
+# Office: cx_oracle. Install requirements-cx-oracle.txt and Oracle Client.
+# auto tries cx_Oracle only when oracledb is not installed, never on errors.
+ORACLE_DRIVER=oracledb
+# Absolute or engine-relative directory; blank uses the driver's default mode/search.
+ORACLE_CLIENT_LIB_DIR=
+# Used only by cx_Oracle; python-oracledb always uses UTF-8.
+ORACLE_ENCODING=UTF-8
+ORACLE_NENCODING=UTF-8
+ORACLE_USER=scheduler_runtime
+ORACLE_PASSWORD=replace-through-secret-store
+ORACLE_DSN=
+ORACLE_HOST=localhost
+ORACLE_PORT=1521
+ORACLE_SERVICE=
+ORACLE_SID=ORCL
+
+# Optional deployment isolation, for example runtime/office. Blank retains the
+# current engine-root database/snapshots/logs. Never share a home queue/outbox
+# with office Oracle. A new directory starts with an empty local queue.
+SCHEDULER_DATA_DIR=
+
+# Input source: file keeps existing JSON files; oracle refreshes the safe
+# Schedule_Master.json snapshot from SCHEDULE_EXTRACT_MASTER.
+SCHEDULER_MASTER_SOURCE=file
+SCHEDULER_MASTER_TABLE=SCHEDULE_EXTRACT_MASTER
+SCHEDULER_MASTER_REFRESH_SECONDS=3600
+SCHEDULER_MASTER_ALLOW_STALE_SNAPSHOT=1
+# Optional extensions after the supplied Oracle schema migration has added
+# those columns. Leave blank for an older master table.
+SCHEDULER_MASTER_OPTIONAL_COLUMNS=
+
+# Calendar snapshots, enabled by the worker with SCHEDULER_CALENDAR_SOURCE=oracle.
+SCHEDULER_CALENDAR_SOURCE=file
+# Successful reads occur once per local day; this is failed-read retry backoff.
+SCHEDULER_CALENDAR_RETRY_SECONDS=300
+SCHEDULER_DATEMAST_TABLE=DATEMAST
+SCHEDULER_DATEMAST_DATE_COLUMN=REPORT_DATE
+# Optional additional future holiday dates. Leave blank for DATEMAST + bank rules.
+# Set an existing table explicitly (for example HOLIDAY_MASTER) to opt in.
+SCHEDULER_HOLIDAY_TABLE=
+SCHEDULER_HOLIDAY_DATE_COLUMN=HOLIDAY_DATE
+
+# Durable Oracle status + audit delivery. Apply rebuild_oracle_logging.py --apply
+# once before enabling on a new installation. Monitoring also logs real state.
+SCHEDULER_ORACLE_LOGGING=0
+SCHEDULER_EXTG_TABLE=SCHEDULE_EXTG
+SCHEDULER_EXTG_LOG_TABLE=SCHEDULE_EXTG_LOG
+SCHEDULER_ORACLE_LOG_RETRY_SECONDS=30
+# Legacy best-effort mirror stays disabled with the durable logger.
+SCHEDULER_EXTG_MIRROR=0
+
+# Control API must stay loopback unless an approved token is set.
+SCHEDULER_API_HOST=127.0.0.1
+SCHEDULER_API_PORT=8091
+SCHEDULER_API_TOKEN=
+
+# Monitor-only eligibility refresh cadence (no Oracle procedure execution).
+SCHEDULER_MONITOR_INTERVAL_SECONDS=30
+
+# Historical failure recovery: old failed report dates are retried oldest
+# first only in these global windows. A retry never interrupts an Oracle call
+# already in progress and ignores the job's ordinary RUN_BY window.
+SCHEDULER_RETRY_LOOKBACK_DAYS=15
+SCHEDULER_MAX_RETRY_EXECUTIONS_PER_CYCLE=1
+SCHEDULER_RETRY_WINDOWS=ALL_DAY

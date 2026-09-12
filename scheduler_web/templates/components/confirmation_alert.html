@@ -1,0 +1,11 @@
+{% if confirmation_alert_active %}
+<div data-live-refresh data-confirmation-alert>
+  {% if confirmation_alert_count %}
+  <aside class="confirmation-alert" role="status" aria-live="polite" aria-label="Pending schedule confirmations">
+    <i class="bi bi-shield-exclamation" aria-hidden="true"></i>
+    <div class="confirmation-alert-copy"><strong>{{ confirmation_alert_count }} schedule confirmation{{ confirmation_alert_count|pluralize }} pending today</strong><span>{% if confirmation_alert_mine %}{{ confirmation_alert_mine }} assigned to you.{% else %}Awaiting the assigned operator.{% endif %}{% if confirmation_alert_unassigned %} {{ confirmation_alert_unassigned }} need{{ confirmation_alert_unassigned|pluralize:"s," }} an available operator.{% endif %}</span></div>
+    <a class="btn btn-sm btn-outline-warning" href="{% url 'scheduler:confirmation' %}">Review confirmations <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+  </aside>
+  {% endif %}
+</div>
+{% endif %}

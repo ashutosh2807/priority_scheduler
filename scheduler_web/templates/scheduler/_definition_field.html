@@ -1,0 +1,6 @@
+<div class="definition-field{% if field.errors %} definition-field-invalid{% endif %}">
+  <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %}<span class="definition-required" aria-hidden="true"> *</span>{% elif field.name == 'responsible_operator' %} <span class="definition-optional">Required for confirmation</span>{% else %} <span class="definition-optional">Optional</span>{% endif %}</label>
+  {{ field }}
+  {% if field.help_text %}<div class="form-text" id="{{ field.auto_id }}_helptext">{{ field.help_text }}</div>{% endif %}
+  {% if field.errors %}<div class="invalid-feedback d-block" id="{{ field.auto_id }}_error">{% for error in field.errors %}<div>{{ error }}</div>{% endfor %}</div>{% endif %}
+</div>

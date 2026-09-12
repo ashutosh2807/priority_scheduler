@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% load table_pagination %}
+{% block title %}Operations dashboard{% endblock %}
+{% block content %}
+<div data-live-refresh="20000"></div>
+<section class="card calendar-card mb-4">
+  <div class="card-header d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
+    <div><div class="page-eyebrow">Operations calendar</div><h1 class="section-heading fs-4">{{ calendar_month|date:"F Y" }}</h1><div class="calendar-legend mt-2"><span class="legend-scheduler">Scheduled / READY</span><span class="legend-success">Successful</span><span class="legend-failed">Failed</span><span class="legend-leave">Approved leave</span></div></div>
+    <a class="btn btn-sm btn-outline-primary" href="{% url 'dashboard:calendar' %}">Calendar details</a>
+  </div>
+  {% include "dashboard/calendar_grid.html" %}
+</section>
+
+{% include "scheduler/_runtime_notice.html" with scheduler=scheduler_summary %}
+<section class="today-hero compact mb-4">
+  <div class="today-hero-copy">
+    <div class="page-eyebrow text-white-50">ITRP operations command centre</div>
+    <h2 class="h3 text-white mb-2">What needs attention today?</h2>
+    <p>Follow each schedule from report-date eligibility through STAGING, READY priority ordering, and execution outcome.</p>
+  </div>
+  <div class="today-clock"><span>Local time</span><strong data-live-clock>--:--:--</strong><small>Asia/Kolkata</small></div>
+  <div class="today-hero-actions">
+    <a class="btn btn-light" href="{% url 'scheduler:dashboard' %}"><i class="bi bi-activity me-1"></i>Live monitor</a>
+    <a class="btn btn-outline-light" href="{% url 'leave:list' %}"><i class="bi bi-people me-1"></i>Plan leave cover</a>
+  </div>
+</section>
+
+{% if scheduler_summary.error %}<div class="alert alert-warning"><strong>Scheduler state is unavailable.</strong> {{ scheduler_summary.error }}</div>{% endif %}
+
+<section class="row g-3 mb-4" aria-label="Today's execution metrics">
+  <div class="col-6 col-xl-3">
+    <div class="card stat-card stat-card-primary">
+      <div class="stat-label">Execution plan today</div><div class="stat-value">{{ today_plan|length }}</div>
+      <div class="stat-icon"><i class="bi bi-calendar2-day"></i></div><small class="text-muted">Persisted execution-date occurrences</small>
+    </div>
+  </div>
+  <div class="col-6 col-xl-3">
+    <div class="card stat-card stat-card-warning">
+      <div class="stat-label">In STAGING, not queued</div><div class="stat-value">{{ pre_queue_count }}</div>
+      <div class="stat-icon"><i class="bi bi-signpost-split"></i></div><small class="text-muted">Still passing scheduler gates</small>
+    </div>
+  </div>
+  <div class="col-6 col-xl-3">
+    <a class="text-decoration-none" href="{% url 'scheduler:queue' %}">
+      <div class="card stat-card stat-card-success">
+        <div class="stat-label">READY / priority queue</div><div class="stat-value">{{ scheduler_summary.ready }}</div>
+        <div class="stat-icon"><i class="bi bi-list-ol"></i></div><small class="text-muted">Only READY occurrences have a queue position</small>
+      </div>
+    </a>
+  </div>
+  <div class="col-6 col-xl-3">
+    <a class="text-decoration-none" href="{% url 'scheduler:history' %}?date={{ today|date:'Y-m-d' }}">
+      <div class="card stat-card {% if today_failed %}stat-card-danger{% else %}stat-card-success{% endif %}">
+        <div class="stat-label">Attempts today</div><div class="stat-value">{{ today_executions|length }}</div>
+        <div class="stat-icon"><i class="bi bi-check2-circle"></i></div><small class="text-muted">{{ today_successful }} successful · {{ today_failed }} failed</small>
+      </div>
+    </a>
+  </div>
+</section>
+
+<div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-3"><div><div class="page-eyebrow">Daily operations</div><h2 class="section-heading">{{ today|indian_date }}</h2></div><a class="btn btn-primary" href="{% url 'scheduler:day' %}">Open day-wise tasks</a></div>
+<div class="mb-4">{% include "scheduler/_day_table.html" with rows=day_rows %}</div>
+
+<div class="row g-4">
+  <div class="col-xl-8">
+    <section class="card h-100">
+      <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+        <div>
+          <div class="page-eyebrow">Execution-date view</div>
+          <h2 class="section-heading fs-5">Today’s plan and next gate</h2>
+          <small class="text-muted">Execution date decides when processing is allowed. Report date stays attached to the schedule and never changes.</small>
+        </div>
+        <a class="btn btn-sm btn-outline-primary" href="{% url 'dashboard:calendar' %}?date={{ today|date:'Y-m-d' }}">Operations calendar</a>
+      </div>
+      <div class="today-plan">
+        {% table_page today_plan 'plan_page' 5 as plan_page %}
+        {% for schedule in plan_page %}
+          <article class="timeline-item">
+            <div class="timeline-time"><strong>{{ schedule.timing.window_label|default:"Any time" }}</strong><small>eligible window</small></div>
+            <div class="timeline-line"><span class="timeline-dot {{ schedule.timing.tone }}"></span></div>
+            <div class="timeline-content">
+              <div class="d-flex justify-content-between gap-2 align-items-start">
+                <div><a class="fw-bold text-decoration-none" href="{% url 'scheduler:detail' schedule.id %}">{{ schedule.name }}</a>{% include "components/date_pair.html" with report_date=schedule.occurrence.report_date planned_date=schedule.occurrence.execution_date only %}</div>
+                <span class="badge {% if schedule.operational_state == 'READY' %}badge-soft-success{% elif schedule.operational_state == 'PAUSED' %}badge-soft-warning{% elif schedule.operational_state == 'CANCELLED' %}badge-soft-danger{% else %}badge-soft-primary{% endif %}">{{ schedule.operational_state|title }}</span>
+              </div>
+              <div class="timeline-status"><i class="bi {% if schedule.operational_state == 'READY' %}bi-list-check{% else %}bi-signpost-split{% endif %}"></i>{{ schedule.timing.label }}</div>
+              {% if schedule.lifecycle_state != 'READY' %}
+                <div class="prequeue-inline"><strong>Not in priority queue yet.</strong> {% if schedule.occurrence.reason %}{{ schedule.occurrence.reason }}{% else %}The scheduler is still evaluating its next gate.{% endif %}</div>
+              {% endif %}
+              {% if schedule.timing.countdown_target %}<strong class="countdown" data-countdown-target="{{ schedule.timing.countdown_target }}" data-countdown-prefix="{{ schedule.timing.countdown_prefix }}" data-countdown-finished="Refresh scheduler status">{{ schedule.timing.countdown_prefix }} —</strong>{% endif %}
+            </div>
+          </article>
+        {% empty %}
+          <div class="empty-state py-5"><i class="bi bi-calendar-check"></i><p class="mb-1 mt-2 fw-semibold">No persisted execution is planned for today.</p><p class="small mb-0">The scheduler adds occurrences only after it calculates eligibility.</p></div>
+        {% endfor %}
+      </div>
+      {% render_table_pagination plan_page 'plan_page' 'Execution plan' %}
+    </section>
+  </div>
+
+  <div class="col-xl-4">
+    <section class="card mb-4">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <div><div class="page-eyebrow">Priority queue</div><h2 class="section-heading fs-5">READY items waiting now</h2></div>
+        <a href="{% url 'scheduler:queue' %}" class="btn btn-sm btn-outline-primary">Open</a>
+      </div>
+      <div class="queue-live-list">
+        {% for schedule in priority_queue %}
+          <article class="queue-live-item">
+            <div class="queue-position">{{ schedule.queue_position }}</div>
+            <div class="flex-grow-1 min-w-0"><a class="fw-bold text-decoration-none d-block text-truncate" href="{% url 'scheduler:detail' schedule.id %}">{{ schedule.name }}</a>{% include "components/date_pair.html" with report_date=schedule.occurrence.report_date planned_date=schedule.occurrence.execution_date only %}<small class="d-block text-muted">{{ schedule.timing.window_label }}</small><div class="queue-live-status"><i class="bi bi-clock"></i>{{ schedule.timing.label }}</div></div>
+          </article>
+        {% empty %}
+          <div class="empty-state py-4">
+            <i class="bi bi-list-check"></i><p class="mb-1 mt-2 fw-semibold">No READY item is waiting.</p>
+            {% if pre_queue %}
+              <div class="prequeue-callout text-start mt-3">
+                <strong><i class="bi bi-signpost-split me-1"></i>{{ pre_queue_count }} occurrence{{ pre_queue_count|pluralize }} still in STAGING</strong>
+                <p class="small mb-2">They are visible in today’s plan, but are deliberately absent from priority order until their scheduler gates pass.</p>
+                {% for schedule in pre_queue %}
+                  <a class="d-block small text-decoration-none py-1" href="{% url 'scheduler:detail' schedule.id %}"><strong>{{ schedule.name }}</strong> · {{ schedule.occurrence.waiting_for|default:schedule.operational_state }}</a>
+                {% endfor %}
+              </div>
+            {% else %}
+              <p class="small mb-0">The scheduler has no persisted READY occurrence at this moment.</p>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+      <div class="card-footer small text-muted"><i class="bi bi-info-circle me-1"></i>Queue position is real only for persistent READY records. The worker decides the exact start on its next priority-aware tick.</div>
+    </section>
+
+    <section class="card">
+      <div class="card-header"><div class="page-eyebrow">Recorded today</div><h2 class="section-heading fs-5">Execution outcomes</h2></div>
+      <div class="list-group list-group-flush">
+        {% table_page today_executions 'outcomes_page' 5 as outcomes_page %}{% for execution in outcomes_page %}
+          <a class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3" href="{% url 'scheduler:detail' execution.job_id %}"><span class="outcome-icon {% if execution.status == 'SUCCESS' %}success{% elif execution.status == 'FAILED' %}failed{% else %}running{% endif %}"><i class="bi {% if execution.status == 'SUCCESS' %}bi-check-lg{% elif execution.status == 'FAILED' %}bi-exclamation-lg{% else %}bi-arrow-repeat{% endif %}"></i></span><span class="flex-grow-1"><strong class="d-block">{{ execution.job_name }}</strong><small class="text-muted">Report {{ execution.report_date|default:"—"|indian_date }}</small></span><span class="badge {% if execution.status == 'SUCCESS' %}badge-soft-success{% elif execution.status == 'FAILED' %}badge-soft-danger{% else %}badge-soft-primary{% endif %}">{{ execution.status|title }}</span></a>
+        {% empty %}
+          <div class="empty-state py-4"><i class="bi bi-clipboard2-check"></i><p class="mb-0 mt-2">No execution attempt has started today.</p></div>
+        {% endfor %}
+      </div>{% render_table_pagination outcomes_page 'outcomes_page' 'Execution outcomes' %}
+    </section>
+  </div>
+</div>
+
+<section class="process-card mt-4 mb-0">
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+    <div><div class="page-eyebrow">How the scheduler works</div><h2 class="section-heading fs-5">A schedule is not in the priority queue until it becomes READY.</h2></div>
+    <a class="btn btn-sm btn-outline-primary" href="{% url 'scheduler:dashboard' %}">See live monitor</a>
+  </div>
+  <div class="process-flow short">
+    <article class="process-step"><span class="process-number">1</span><div><strong>Schedule definition</strong><small>Frequency, margin, report date, and time window are read from Schedule Master.</small></div></article>
+    <i class="bi bi-arrow-right process-arrow"></i>
+    <article class="process-step"><span class="process-number">2</span><div><strong>STAGING</strong><small>DATEMAST, execution date, time window, control, and confirmation gates are checked.</small></div></article>
+    <i class="bi bi-arrow-right process-arrow"></i>
+    <article class="process-step"><span class="process-number">3</span><div><strong>READY priority queue</strong><small>Only a fully eligible persisted READY occurrence receives a priority position.</small></div></article>
+    <i class="bi bi-arrow-right process-arrow"></i>
+    <article class="process-step"><span class="process-number">4</span><div><strong>Execution outcome</strong><small>The worker runs the next priority item and records success or failure against report date.</small></div></article>
+  </div>
+</section>
+{% endblock %}

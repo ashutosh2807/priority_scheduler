@@ -1,0 +1,153 @@
+{% extends "base.html" %}{% load table_pagination %}
+{% block title %}Leave coverage{% endblock %}
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
+  <div>
+    <a href="{% url 'leave:list' %}" class="text-decoration-none small"><i class="bi bi-arrow-left me-1"></i>Back to availability</a>
+    <div class="page-eyebrow mt-2">ITRP availability and schedule cover</div>
+    <h1 class="page-title h2 mb-1">Leave coverage plan</h1>
+    <p class="page-subtitle">{{ leave_request.admin.display_name }} · {{ leave_request.start_date|indian_date }} to {{ leave_request.end_date|indian_date }}</p>
+  </div>
+  <span class="badge fs-6 {% if leave_request.status == 'APPROVED' %}badge-soft-success{% elif leave_request.status == 'PENDING' %}badge-soft-warning{% elif leave_request.status == 'REJECTED' %}badge-soft-danger{% else %}badge-soft-secondary{% endif %}">{{ leave_request.get_status_display }}</span>
+</div>
+
+<section class="card mb-4">
+  <div class="card-body p-4">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="text-muted small text-uppercase fw-bold">Administrator</div>
+        <strong>{{ leave_request.admin.display_name }}</strong>
+        <div class="text-muted">{{ leave_request.admin.designation|default:leave_request.admin.employee_id }}</div>
+      </div>
+      <div class="col-md-4">
+        <div class="text-muted small text-uppercase fw-bold">Leave period</div>
+        <strong>{{ leave_request.start_date|indian_date }} – {{ leave_request.end_date|indian_date }}</strong>
+      </div>
+      <div class="col-md-4">
+        <div class="text-muted small text-uppercase fw-bold">Approval</div>
+        {% if leave_request.approved_by %}
+          <strong>{{ leave_request.approved_by.display_name }}</strong>
+          <div class="text-muted">{{ leave_request.approved_at|indian_datetime }}</div>
+        {% else %}
+          <span class="text-muted">Coverage planning in progress</span>
+        {% endif %}
+      </div>
+      <div class="col-12">
+        <div class="text-muted small text-uppercase fw-bold mb-1">Reason</div>
+        <p class="mb-0">{{ leave_request.reason|linebreaksbr }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="card coverage-card mb-4">
+  <div class="card-header d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-2">
+    <div>
+      <div class="page-eyebrow">Required before leave approval</div>
+      <h2 class="section-heading fs-5 mb-1">Confirmation schedule coverage</h2>
+      <p class="small text-muted mb-0">Only schedules that require an operator confirmation are assigned. Automated schedules stay automated and can still be paused from Scheduler controls.</p>
+    </div>
+    {% if coverage_complete %}
+      <span class="badge badge-soft-success"><i class="bi bi-check2-circle me-1"></i>Coverage complete</span>
+    {% else %}
+      <span class="badge badge-soft-warning"><i class="bi bi-exclamation-triangle me-1"></i>Coverage required</span>
+    {% endif %}
+  </div>
+
+  {% table_page confirmation_schedules 'coverage_page' 10 as coverage_page %}
+  {% if confirmation_schedules %}
+    <div class="coverage-availability px-4 py-3 border-bottom">
+      <div class="d-flex flex-column flex-md-row justify-content-between gap-2">
+        <div><strong>{{ available_operators|length }} available operator{{ available_operators|length|pluralize }}</strong><small class="d-block text-muted">Active ITRP users without overlapping pending or approved leave during this period.</small></div>
+        {% if not available_operators %}<span class="text-danger small"><i class="bi bi-person-x me-1"></i>No available cover can be assigned for these dates.</span>{% endif %}
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table align-middle mb-0">
+        <thead><tr><th>Confirmation schedule</th><th>Current operator</th><th>Available cover</th><th class="text-end">Action</th></tr></thead>
+        <tbody>
+          {% for schedule in coverage_page %}
+            <tr>
+              <td>
+                <a class="fw-semibold text-decoration-none" href="{% url 'scheduler:detail' schedule.id %}">{{ schedule.name }}</a>
+                <small class="d-block text-muted">Schedule #{{ schedule.id }} · {{ schedule.frequencies }}</small>
+              </td>
+              <td>{{ leave_request.admin.display_name }}</td>
+              <td>
+                {% if schedule.coverage %}
+                  <strong class="text-success">{{ schedule.coverage.covering_admin.display_name }}</strong>
+                  <small class="d-block text-muted">Assigned by {{ schedule.coverage.assigned_by.display_name|default:"ITRP operator" }}</small>
+                {% else %}
+                  <span class="text-warning-emphasis">Not assigned</span>
+                {% endif %}
+              </td>
+              <td class="text-end">
+                {% if can_manage_coverage and leave_request.status == 'PENDING' %}
+                  <div class="d-flex justify-content-end flex-wrap gap-2">
+                    <form method="post" action="{% url 'leave:coverage-assign' leave_request.pk %}" class="d-flex gap-2 align-items-center">
+                      {% csrf_token %}
+                      {{ schedule.coverage_form.schedule_id }}
+                      {{ schedule.coverage_form.covering_admin }}
+                      <button class="btn btn-sm {% if schedule.coverage %}btn-outline-primary{% else %}btn-primary{% endif %}" {% if not available_operators %}disabled{% endif %}>
+                        {% if schedule.coverage %}Reassign{% else %}Assign cover{% endif %}
+                      </button>
+                    </form>
+                    {% if schedule.coverage %}
+                      <form method="post" action="{% url 'leave:coverage-remove' leave_request.pk schedule.coverage.pk %}" data-confirm="Remove coverage for {{ schedule.name }}?">
+                        {% csrf_token %}<button class="btn btn-sm btn-outline-secondary">Remove</button>
+                      </form>
+                    {% endif %}
+                  </div>
+                {% elif schedule.coverage %}
+                  <span class="badge badge-soft-success">Covered</span>
+                {% else %}
+                  <span class="badge badge-soft-warning">Uncovered</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="card-body">
+      <div class="confirmation-status not-required">
+        <i class="bi bi-robot"></i>
+        <div><strong>No confirmation coverage is needed</strong><small class="d-block mt-1">This operator has no confirmation-required schedule ownership for the requested dates. Automated schedules do not need a replacement operator.</small></div>
+      </div>
+    </div>
+  {% endif %}
+  {% render_table_pagination coverage_page 'coverage_page' 'Leave confirmation coverage' %}
+</section>
+
+<section class="card">
+  <div class="card-body p-4">
+    {% if leave_request.status == 'PENDING' and can_approve %}
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+        <div>
+          <div class="page-eyebrow">SUPERUSER decision</div>
+          {% if coverage_complete %}
+            <strong>Coverage is ready for approval.</strong>
+          {% else %}
+            <strong class="text-warning-emphasis">Approval will assign available cover for any gaps.</strong><p class="small text-muted mb-0">Preferred backups are selected first. Approval is blocked if no available operator can cover a confirmation task.</p>
+          {% endif %}
+        </div>
+        <div class="d-flex gap-2">
+          <form method="post" action="{% url 'leave:action' leave_request.pk 'reject' %}" data-disable-on-submit>
+            {% csrf_token %}<button class="btn btn-outline-danger">Reject</button>
+          </form>
+          <form method="post" action="{% url 'leave:action' leave_request.pk 'approve' %}" data-disable-on-submit>
+            {% csrf_token %}<button class="btn btn-success"><i class="bi bi-check2 me-1"></i>Approve leave &amp; coverage</button>
+          </form>
+        </div>
+      </div>
+    {% elif leave_request.status == 'PENDING' or leave_request.status == 'APPROVED' %}
+      <div class="d-flex justify-content-end">
+        <form method="post" action="{% url 'leave:action' leave_request.pk 'cancel' %}" data-disable-on-submit>
+          {% csrf_token %}<button class="btn btn-outline-danger">Cancel request</button>
+        </form>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

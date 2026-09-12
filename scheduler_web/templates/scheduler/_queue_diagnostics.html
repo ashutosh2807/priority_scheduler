@@ -1,0 +1,25 @@
+{% load scheduler_labels %}
+<div class="text-start" role="status">
+  <h3 class="h6 mb-2">{{ queue_diagnostics.title }}</h3>
+  <p class="small text-muted mb-3">{{ queue_diagnostics.detail }}</p>
+  <div class="d-flex flex-wrap gap-2 mb-3" aria-label="Recorded schedule counts">
+    <span class="badge badge-soft-primary">{{ queue_diagnostics.total }} configured</span>
+    <span class="badge badge-soft-success">{{ queue_diagnostics.active }} active</span>
+    <span class="badge badge-soft-secondary">{{ queue_diagnostics.inactive }} inactive</span>
+    <span class="badge badge-soft-warning">{{ queue_diagnostics.waiting_count }} waiting occurrence{{ queue_diagnostics.waiting_count|pluralize }}</span>
+    {% if queue_diagnostics.running %}<span class="badge badge-soft-primary">{{ queue_diagnostics.running }} running</span>{% endif %}
+  </div>
+  {% if queue_diagnostics.calendar_day %}
+    <p class="small mb-3"><strong>{{ queue_diagnostics.today|indian_date }} · {{ queue_diagnostics.calendar_day.day_label }}</strong><br>{{ queue_diagnostics.calendar_day.reason }}{% if queue_diagnostics.calendar_day.is_provisional %} <span class="text-muted">Provisional bank calendar; DATEMAST is published through T−1.</span>{% endif %}</p>
+  {% endif %}
+  {% if queue_diagnostics.waiting %}
+    <p class="small fw-semibold mb-1">Recorded gates for active schedules</p>
+    <ul class="list-unstyled small mb-3">
+      {% for item in queue_diagnostics.waiting %}
+        <li class="border-top py-2"><a class="fw-semibold text-decoration-none" href="{% url 'scheduler:detail' item.id %}">{{ item.name }}</a> · {{ item.occurrence.waiting_for|default:item.operational_state|state_label }}{% if item.occurrence %}{% include "components/date_pair.html" with report_date=item.occurrence.report_date planned_date=item.occurrence.execution_date only %}{% endif %}<span class="d-block text-muted">{{ item.occurrence.reason|default:"Waiting for the scheduler's next eligibility evaluation." }}</span></li>
+      {% endfor %}
+    </ul>
+    {% if queue_diagnostics.more_waiting %}<p class="small text-muted">Showing the first 5 of {{ queue_diagnostics.waiting_count }} waiting occurrences.</p>{% endif %}
+  {% endif %}
+  <div class="d-flex flex-wrap gap-2"><a class="btn btn-sm btn-outline-primary" href="{% url 'scheduler:day' %}">Open daily workspace</a><a class="btn btn-sm btn-light" href="{% url 'scheduler:jobs' %}">Manage schedules</a></div>
+</div>

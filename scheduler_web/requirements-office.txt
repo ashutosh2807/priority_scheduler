@@ -1,0 +1,5 @@
+# Install into the office environment with an approved Python/driver build.
+# This profile deliberately does not depend on python-oracledb.
+-r requirements.txt
+Django>=5.2,<5.3
+-r ../scheduler_project/requirements-cx-oracle.txt

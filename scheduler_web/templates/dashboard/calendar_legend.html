@@ -1,0 +1,7 @@
+<div class="calendar-holiday-key px-3 py-2">
+  <span class="holiday-key-item"><span class="holiday-key-swatch"></span>Holiday</span>
+  <span class="holiday-key-item"><span class="holiday-key-swatch working"></span>Working Saturday</span>
+  <span class="small text-muted">{% if holiday_markers_available %}{% if holiday_rule_source %}{% if holiday_rule_source == "datemast_and_bank_calendar" %}DATEMAST + bank calendar{% else %}Bank calendar defaults · DATEMAST history unavailable{% endif %}{% if holiday_observed_through %} · Past dates assessed {% if holiday_observed_from %}from {{ holiday_observed_from|indian_date }} {% endif %}through {{ holiday_observed_through|indian_date }} (T−1){% endif %}{% else %}Holiday source: {{ holiday_source_label }}{% if holiday_count == 0 %} · No configured holiday dates loaded{% endif %}{% endif %}{% else %}Holiday markers unavailable until the scheduler calendar reconnects.{% endif %}</span>
+  {% if calendar_meta.coverage_start and calendar_meta.coverage_end %}<span class="small text-muted w-100">{% include "dashboard/_calendar_coverage.html" %}</span>{% endif %}
+  {% if holiday_rule_source %}<span class="small text-muted w-100">Default holidays: Sundays and 2nd/4th Saturdays. Older dates outside loaded history, today and future dates use provisional bank defaults.</span>{% endif %}
+</div>

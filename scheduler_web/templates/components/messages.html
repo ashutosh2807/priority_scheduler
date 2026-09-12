@@ -1,0 +1,3 @@
+{% if messages %}
+<div class="messages-stack" aria-live="polite">{% for message in messages %}<div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show shadow-sm" role="alert"><i class="bi {% if message.tags == 'success' %}bi-check-circle{% elif message.tags == 'error' %}bi-exclamation-octagon{% else %}bi-info-circle{% endif %} me-2"></i>{{ message }}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>{% endfor %}</div>
+{% endif %}

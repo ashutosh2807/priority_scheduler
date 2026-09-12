@@ -1,0 +1,23 @@
+<nav class="sidebar-nav py-3" aria-label="Primary navigation">
+    <div class="nav-section-label">Workspace</div>
+    <a class="sidebar-link {% if request.resolver_match.url_name == 'day' %}active{% endif %}" href="{% url 'scheduler:day' %}"><i class="bi bi-calendar2-check"></i><span>Day-wise tasks</span></a>
+    <a class="sidebar-link {% if request.resolver_match.namespace == 'dashboard' and request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'dashboard:home' %}"><i class="bi bi-grid-1x2"></i><span>Dashboard</span></a>
+    <a class="sidebar-link {% if request.resolver_match.namespace == 'scheduler' and request.resolver_match.url_name == 'jobs' %}active{% endif %}" href="{% url 'scheduler:jobs' %}"><i class="bi bi-calendar-week"></i><span>Schedules</span></a>
+    <a class="sidebar-link {% if request.resolver_match.namespace == 'leave' and request.resolver_match.url_name != 'calendar' %}active{% endif %}" href="{% url 'leave:list' %}"><i class="bi bi-person-workspace"></i><span>Leave &amp; coverage</span></a>
+    <a class="sidebar-link {% if request.resolver_match.namespace == 'dashboard' and request.resolver_match.url_name == 'calendar' %}active{% endif %}" href="{% url 'dashboard:calendar' %}"><i class="bi bi-calendar3"></i><span>Operations calendar</span></a>
+    <div class="nav-section-label mt-4">Applications</div>
+    <a class="sidebar-link {% if request.resolver_match.namespace == 'sulog' %}active{% endif %}" href="{% url 'sulog:index' %}"{% if request.resolver_match.namespace == 'sulog' %} aria-current="page"{% endif %}><i class="bi bi-journal-code" aria-hidden="true"></i><span>SULOG</span></a>
+    <a class="sidebar-link {% if request.resolver_match.namespace == 'eloadlog' %}active{% endif %}" href="{% url 'eloadlog:index' %}"{% if request.resolver_match.namespace == 'eloadlog' %} aria-current="page"{% endif %}><i class="bi bi-file-earmark-bar-graph" aria-hidden="true"></i><span>ELOADLOG</span></a>
+    <a class="sidebar-link {% if request.resolver_match.namespace == 'mailer' %}active{% endif %}" href="{% url 'mailer:index' %}"{% if request.resolver_match.namespace == 'mailer' %} aria-current="page"{% endif %}><i class="bi bi-envelope" aria-hidden="true"></i><span>MAILER</span></a>
+    <div class="nav-section-label mt-4">Scheduler</div>
+    <a class="sidebar-link {% if request.resolver_match.namespace == 'scheduler' and request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'scheduler:dashboard' %}"><i class="bi bi-activity"></i><span>Monitor</span></a>
+    <a class="sidebar-link {% if request.resolver_match.namespace == 'scheduler' and request.resolver_match.url_name == 'upcoming' %}active{% endif %}" href="{% url 'scheduler:upcoming' %}"><i class="bi bi-calendar2-week"></i><span>Upcoming processes</span></a>
+    <a class="sidebar-link {% if request.resolver_match.namespace == 'scheduler' and request.resolver_match.url_name == 'queue' %}active{% endif %}" href="{% url 'scheduler:queue' %}"><i class="bi bi-list-ol"></i><span>Queue</span></a>
+    <a class="sidebar-link {% if request.resolver_match.namespace == 'scheduler' and request.resolver_match.url_name == 'confirmation' %}active{% endif %}" href="{% url 'scheduler:confirmation' %}"><i class="bi bi-shield-check"></i><span>Confirmation gates</span></a>
+    <a class="sidebar-link {% if request.resolver_match.namespace == 'scheduler' and request.resolver_match.url_name == 'history' %}active{% endif %}" href="{% url 'scheduler:history' %}"><i class="bi bi-clock-history"></i><span>Execution history</span></a>
+    <div class="nav-section-label mt-4">Administration</div>
+    {% if user.is_superuser or user.role == 'SUPERUSER' %}<a class="sidebar-link {% if request.resolver_match.namespace == 'accounts' and request.resolver_match.url_name != 'login' %}active{% endif %}" href="{% url 'accounts:list' %}"><i class="bi bi-people"></i><span>Administrators</span></a>{% endif %}
+    <a class="sidebar-link {% if request.resolver_match.namespace == 'audit' %}active{% endif %}" href="{% url 'audit:list' %}"><i class="bi bi-journal-text"></i><span>Audit log</span></a>
+    {% if user.is_staff %}<a class="sidebar-link" href="{% url 'admin:index' %}"><i class="bi bi-gear"></i><span>Django admin</span></a>{% endif %}
+    <a class="sidebar-link {% if request.resolver_match.url_name == 'help' %}active{% endif %}" href="{% url 'dashboard:help' %}"><i class="bi bi-question-circle"></i><span>Help &amp; operating guide</span></a>
+</nav>

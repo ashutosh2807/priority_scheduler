@@ -1,0 +1,207 @@
+[
+  {
+    "id": 1,
+    "name": "TLTRO_DAILY",
+    "package_name": "SCHEDULE_EXTRACTS.TLTRO",
+    "run_config": {
+      "RUNS_ON": [
+        "DAILY"
+      ],
+      "HOLIDAY_RUN": []
+    },
+    "margin": "T",
+    "same_day": 0,
+    "time_flag": 0,
+    "is_active": 1,
+    "created_date": "2026-09-07T21:38:02.383000",
+    "confirmation_needed": 0
+  },
+  {
+    "id": 2,
+    "name": "TLTRO_DAILY_WEEKLY",
+    "package_name": "SCHEDULE_EXTRACTS.TLTRO",
+    "run_config": {
+      "RUNS_ON": [
+        "DAILY",
+        "WEEKLY"
+      ],
+      "RUN_BY": {
+        "FROM_TIME": "18:00",
+        "TO_TIME": "20:00"
+      },
+      "HOLIDAY_RUN": []
+    },
+    "margin": "T",
+    "same_day": 0,
+    "time_flag": 1,
+    "is_active": 0,
+    "created_date": "2026-09-07T21:38:02.415000",
+    "confirmation_needed": 1
+  },
+  {
+    "id": 3,
+    "name": "TLTRO_FORTNIGHTLY",
+    "package_name": "SCHEDULE_EXTRACTS.TLTRO",
+    "run_config": {
+      "RUNS_ON": [
+        "FORTNIGHTLY"
+      ],
+      "HOLIDAY_RUN": []
+    },
+    "margin": "T",
+    "same_day": 0,
+    "time_flag": 0,
+    "is_active": 0,
+    "created_date": "2026-09-07T21:38:02.427000",
+    "confirmation_needed": 0
+  },
+  {
+    "id": 4,
+    "name": "TLTRO_MONTHLY",
+    "package_name": "SCHEDULE_EXTRACTS.TLTRO",
+    "run_config": {
+      "RUNS_ON": [
+        "MONTHLY"
+      ],
+      "RUN_BY": {
+        "FROM_TIME": "06:00",
+        "TO_TIME": "10:00"
+      },
+      "HOLIDAY_RUN": []
+    },
+    "margin": "T",
+    "same_day": 0,
+    "time_flag": 1,
+    "is_active": 0,
+    "created_date": "2026-09-07T21:38:02.450000",
+    "confirmation_needed": 0
+  },
+  {
+    "id": 5,
+    "name": "TLTRO_QUARTERLY",
+    "package_name": "SCHEDULE_EXTRACTS.TLTRO",
+    "run_config": {
+      "RUNS_ON": [
+        "QUARTERLY"
+      ],
+      "HOLIDAY_RUN": [
+        "HOLIDAY"
+      ]
+    },
+    "margin": "T",
+    "same_day": 0,
+    "time_flag": 0,
+    "is_active": 0,
+    "created_date": "2026-09-07T21:38:02.478000",
+    "confirmation_needed": 1
+  },
+  {
+    "id": 6,
+    "name": "TLTRO_HALF_YEARLY",
+    "package_name": "SCHEDULE_EXTRACTS.TLTRO",
+    "run_config": {
+      "RUNS_ON": [
+        "HALF-YEARLY"
+      ],
+      "HOLIDAY_RUN": []
+    },
+    "margin": "T",
+    "same_day": 0,
+    "time_flag": 0,
+    "is_active": 0,
+    "created_date": "2026-09-07T21:38:02.562000",
+    "confirmation_needed": 0
+  },
+  {
+    "id": 7,
+    "name": "TLTRO_ANNUALLY",
+    "package_name": "SCHEDULE_EXTRACTS.TLTRO",
+    "run_config": {
+      "RUNS_ON": [
+        "ANNUALLY"
+      ],
+      "RUN_BY": {
+        "FROM_TIME": "22:00",
+        "TO_TIME": "23:59"
+      },
+      "HOLIDAY_RUN": [
+        "HOLIDAY"
+      ]
+    },
+    "margin": "T",
+    "same_day": 0,
+    "time_flag": 1,
+    "is_active": 0,
+    "created_date": "2026-09-07T21:38:02.574000",
+    "confirmation_needed": 1
+  },
+  {
+    "id": 8,
+    "name": "TLTRO_SAME_DAY",
+    "package_name": "SCHEDULE_EXTRACTS.TLTRO",
+    "run_config": {
+      "RUNS_ON": [
+        "DAILY"
+      ],
+      "RUN_BY": {
+        "FROM_TIME": "15:00",
+        "TO_TIME": "17:00"
+      },
+      "HOLIDAY_RUN": []
+    },
+    "margin": "T",
+    "same_day": 1,
+    "time_flag": 1,
+    "is_active": 0,
+    "created_date": "2026-09-07T21:38:02.586000",
+    "confirmation_needed": 0
+  },
+  {
+    "id": 9,
+    "name": "TLTRO_DAILY_MARGIN",
+    "package_name": "SCHEDULE_EXTRACTS.TLTRO",
+    "run_config": {
+      "RUNS_ON": [
+        "DAILY"
+      ],
+      "HOLIDAY_RUN": []
+    },
+    "margin": "T+3",
+    "same_day": 0,
+    "time_flag": 0,
+    "is_active": 0,
+    "created_date": "2026-09-07T21:38:02.604000",
+    "confirmation_needed": 0
+  },
+  {
+    "id": 10,
+    "name": "TLTRO_ALL_FREQUENCIES",
+    "package_name": "SCHEDULE_EXTRACTS.TLTRO",
+    "run_config": {
+      "RUNS_ON": [
+        "DAILY",
+        "WEEKLY",
+        "FORTNIGHTLY",
+        "MONTHLY",
+        "QUARTERLY",
+        "HALF-YEARLY",
+        "ANNUALLY"
+      ],
+      "RUN_BY": {
+        "FROM_TIME": "18:00",
+        "TO_TIME": "22:00"
+      },
+      "HOLIDAY_RUN": [
+        "SAT",
+        "SUN",
+        "HOLIDAY"
+      ]
+    },
+    "margin": "T",
+    "same_day": 0,
+    "time_flag": 1,
+    "is_active": 0,
+    "created_date": "2026-09-07T21:38:02.630000",
+    "confirmation_needed": 1
+  }
+]

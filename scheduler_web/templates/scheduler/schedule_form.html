@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Operator context · {{ schedule.name }}{% endblock %}
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
+  <div>
+    <a href="{% url 'scheduler:detail' schedule.id %}" class="small text-decoration-none"><i class="bi bi-arrow-left me-1"></i>Back to schedule</a>
+    <div class="page-eyebrow mt-2">ITRP operations runbook</div>
+    <h1 class="page-title h2 mb-1">{{ schedule.name }}</h1>
+    <p class="page-subtitle">Describe how people support this schedule without altering its scheduler-owned business rule.</p>
+  </div>
+  <span class="badge badge-soft-primary"><i class="bi bi-lock me-1"></i>Scheduler Master protected</span>
+</div>
+
+{% if scheduler.error %}<div class="alert alert-warning">{{ scheduler.error }}</div>{% endif %}
+<div class="alert alert-info small"><i class="bi bi-shield-lock me-1"></i><strong>Protected source:</strong> package, frequency, margin, holiday behavior, confirmation requirement, and time window come from Scheduler Master. This page only updates ITRP-owned description, steps, and confirmation responsibility.</div>
+
+<form method="post" class="card" data-disable-on-submit>
+  {% csrf_token %}
+  <div class="card-body p-4">
+    {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+    <div class="row g-4">
+      <div class="col-12"><div class="page-eyebrow">Scheduler-owned definition</div><div class="row g-3 mt-0"><div class="col-md-4"><small class="text-muted d-block text-uppercase fw-bold">Package / procedure</small><strong>{{ schedule.package_name }}</strong></div><div class="col-md-4"><small class="text-muted d-block text-uppercase fw-bold">Frequency / window</small><strong>{{ schedule.frequencies }}</strong><span class="text-muted d-block small">{{ schedule.run_by }}</span></div><div class="col-md-4"><small class="text-muted d-block text-uppercase fw-bold">Confirmation</small><strong>{% if schedule.confirmation_needed %}Required{% else %}Automated · not required{% endif %}</strong></div></div></div>
+      <div class="col-12"><hr class="my-1"></div>
+      <div class="col-md-6"><label class="form-label" for="{{ form.backup_operator.id_for_label }}">Preferred confirmation cover</label>{{ form.backup_operator }}{{ form.backup_operator.errors }}<div class="form-text">Used when primary and nominated leave cover are unavailable.</div></div>
+      <div class="col-md-6"><label class="form-label" for="{{ form.expected_minutes.id_for_label }}">Expected execution time (minutes)</label>{{ form.expected_minutes }}{{ form.expected_minutes.errors }}<div class="form-text">{{ form.expected_minutes.help_text }}</div></div>
+      <div class="col-12"><div class="page-eyebrow">ITRP operator context</div><h2 class="section-heading fs-5 mb-1">Responsibility, description, and steps involved</h2><p class="small text-muted mb-0">Automated schedules do not need confirmation coverage. A confirmation-required schedule must have a primary operator so leave coverage can be assigned safely.</p></div>
+      <div class="col-md-5"><label class="form-label" for="{{ form.responsible_operator.id_for_label }}">Primary confirmation operator</label>{{ form.responsible_operator }}{% for error in form.responsible_operator.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}<div class="form-text">{{ form.responsible_operator.help_text }}</div></div>
+      <div class="col-md-7"><label class="form-label" for="{{ form.description.id_for_label }}">What does this schedule produce?</label>{{ form.description }}{% for error in form.description.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}<div class="form-text">{{ form.description.help_text }}</div></div>
+      <div class="col-12"><label class="form-label">Steps involved in this process</label><div class="step-builder" data-runbook-builder><textarea class="visually-hidden" data-runbook-source id="{{ form.operational_steps.id_for_label }}" name="{{ form.operational_steps.html_name }}">{{ form.operational_steps.value|default_if_none:"" }}</textarea><div class="step-builder-list" data-step-list></div><button class="btn btn-sm btn-outline-primary mt-3" type="button" data-add-step><i class="bi bi-plus-lg me-1"></i>Add another step</button></div>{% for error in form.operational_steps.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}<div class="form-text">Add operating steps in the order a cover operator should follow them; use arrows to reorder.</div></div>
+    </div>
+  </div>
+  <div class="card-footer d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3"><small class="text-muted">All changes on this page stay in Django and are kept in the portal audit trail.</small><button type="submit" class="btn btn-primary"><i class="bi bi-check2-circle me-1"></i>Save operator context</button></div>
+</form>
+{% endblock %}

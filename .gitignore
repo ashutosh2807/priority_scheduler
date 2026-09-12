@@ -1,0 +1,14 @@
+# Local runtime/secrets, never part of the delivery source.
+.scheduler-venv/
+scheduler_project/.env
+scheduler_web/.env
+
+# Process state and local databases.
+scheduler_project/scheduler.db*
+scheduler_project/*.worker.lock
+scheduler_project/logs/
+scheduler_web/db.sqlite3
+
+# Python cache/build artifacts.
+**/__pycache__/
+*.py[cod]

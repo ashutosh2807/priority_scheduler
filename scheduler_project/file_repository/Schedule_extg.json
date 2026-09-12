@@ -1,0 +1,29 @@
+[
+    {
+        "id": 1,
+        "report_date": "2026-09-11",
+        "name": "IBG_HEDGE_MASTER",
+        "status": "SUCCESS",
+        "same_day": 1,
+        "run_date": "2026-09-12T12:50:40",
+        "last_run": "2026-09-12T12:50:41",
+        "time_flag": 1,
+        "run_config": {
+            "RUNS_ON": [
+                "DAILY"
+            ],
+            "RUN_BY": {
+                "FROM_TIME": "06:00",
+                "TO_TIME": "06:30"
+            },
+            "HOLIDAY_RUN": [
+                "SAT",
+                "SUN",
+                "HOLIDAY"
+            ]
+        },
+        "error_info": null,
+        "confirmation": 0,
+        "count": 100
+    }
+]

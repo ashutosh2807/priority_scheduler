@@ -1,0 +1,7 @@
+.qa/
+__pycache__/
+*.pyc
+.env
+*.sqlite3
+staticfiles/
+logs/

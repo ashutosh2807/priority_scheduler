@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}{% if confirmations %}Daily confirmations{% else %}Day-wise tasks{% endif %}{% endblock %}
+{% block content %}
+<div data-live-refresh="20000"></div>
+{% include "scheduler/_runtime_notice.html" %}
+<div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+  <div><div class="page-eyebrow">ITRP operations · {{ day|indian_date }}</div><h1 class="page-title h2">{% if confirmations %}Confirmation gates{% else %}Day-wise tasks{% endif %}</h1><p class="page-subtitle">{% if confirmations %}Review the named assignee and confirm each report before execution.{% else %}One task occurrence, one current status. Report dates remain visible alongside operating dates.{% endif %}</p></div>
+  <div class="btn-group"><a class="btn btn-outline-secondary" href="?date={{ previous_day|date:'Y-m-d' }}">Previous day</a><a class="btn btn-outline-primary" href="?">Today</a><a class="btn btn-outline-secondary" href="?date={{ next_day|date:'Y-m-d' }}">Next day</a></div>
+</div>
+{% if scheduler.error %}<div class="alert alert-warning">{{ scheduler.error }} Task status is unavailable until the worker reconnects.</div>{% endif %}
+{% if calendar_error %}<div class="alert alert-warning">{{ calendar_error }}</div>{% endif %}
+<div class="calendar-source mb-3"><span class="badge badge-soft-primary">DATEMAST</span>{% if calendar_meta.coverage_start and calendar_meta.coverage_end %}<span>{% include "dashboard/_calendar_coverage.html" %}</span>{% endif %}{% if calendar_meta.effective_report_date %}<span>Last working report: <strong>{{ calendar_meta.effective_report_date|indian_date }}</strong></span>{% endif %}<span>{% if calendar_meta.holiday_observed_through %}DATEMAST cutoff: <strong>{{ calendar_meta.holiday_observed_through|indian_date }}</strong> (T−1){% else %}Latest DATEMAST entry: <strong>{{ calendar_meta.latest_report_date|default:"Unavailable"|indian_date }}</strong>{% endif %}</span><span>Source: {{ calendar_meta.source|default:scheduler.label }}</span>{% if not projection_available %}<span>Persisted activity only; future projections unavailable.</span>{% endif %}</div>
+<div class="day-stats mb-4">{% for label, count in counts.items %}<a class="day-stat" href="?date={{ day|date:'Y-m-d' }}&status={{ label }}"><strong>{% if scheduler.available %}{{ count }}{% else %}—{% endif %}</strong><span>{{ label }}</span></a>{% endfor %}</div>
+<form method="get" class="card card-body mb-4"><div class="row g-3 align-items-end">
+<div class="col-md-3"><label for="day-date" class="form-label">Operating day</label><input class="form-control" id="day-date" type="date" name="date" value="{{ day|date:'Y-m-d' }}"></div>
+<div class="col-md-3"><label for="day-query" class="form-label">Task name or ID</label><input class="form-control" id="day-query" name="q" value="{{ query }}" placeholder="Search tasks"></div>
+<div class="col-md-2"><label for="day-status" class="form-label">Status</label><select class="form-select" id="day-status" name="status"><option value="">All statuses</option>{% for status in statuses %}<option {% if selected_status == status %}selected{% endif %}>{{ status }}</option>{% endfor %}</select></div>
+<div class="col-md-2"><label class="form-check mb-2"><input class="form-check-input" type="checkbox" name="mine" value="1" {% if mine %}checked{% endif %}><span class="form-check-label">Assigned to me</span></label></div><div class="col-md-2"><button class="btn btn-primary w-100">Apply filters</button></div>
+</div></form>
+{% include "scheduler/_day_table.html" %}
+{% endblock %}

@@ -1,0 +1,28 @@
+# Copy to .env or supply these variables through the approved ITRP service/secret mechanism.
+# Do not commit a real .env file.
+
+# Set a long, unique value before a non-development deployment.
+DJANGO_SECRET_KEY=replace-with-a-long-random-value
+DJANGO_DEBUG=0
+DJANGO_ALLOWED_HOSTS=127.0.0.1,localhost
+
+# The portal never receives Oracle credentials. It talks only to the local
+# scheduler control API, which owns all Oracle access and queue writes.
+SCHEDULER_API_BASE_URL=http://127.0.0.1:8091
+SCHEDULER_API_TOKEN=replace-with-the-same-control-api-token
+SCHEDULER_API_TIMEOUT_SECONDS=3
+# Standalone manage.py runserver starts portal audit delivery automatically.
+# Leave enabled; the combined launcher disables it for its separate deliverer.
+SCHEDULER_PORTAL_AUDIT_AUTOSTART=1
+
+# Paths can be relative to scheduler_web, so moving the parent folder is safe.
+# Leave the database setting blank to retain the existing local db.sqlite3.
+SCHEDULER_PROJECT_PATH=../scheduler_project
+DJANGO_DATABASE_PATH=
+# For a new office deployment, use runtime/office/portal.sqlite3 here and
+# SCHEDULER_DATA_DIR=runtime/office in the worker's .env. This keeps copied
+# home accounts, task state and undelivered audit events out of office data.
+
+# Development-only fallback to persisted scheduler snapshots when the worker
+# is deliberately offline. Keep this 0 in production.
+SCHEDULER_ALLOW_LOCAL_READ_FALLBACK=0

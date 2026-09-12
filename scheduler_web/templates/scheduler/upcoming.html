@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load scheduler_labels %}
+{% block title %}Upcoming processes{% endblock %}
+{% block content %}
+<div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-4">
+  <div>
+    <div class="page-eyebrow">Scheduler-owned outlook</div>
+    <h1 class="page-title h2 mb-1">Upcoming processes</h1>
+    <p class="page-subtitle mb-0">A forward view of concrete occurrences supplied by the background scheduler. It does not infer dates in the web application.</p>
+  </div>
+  <div class="d-flex flex-wrap gap-2 align-items-center">
+    <span class="badge {% if scheduler.available and not scheduler.error %}badge-soft-success{% else %}badge-soft-warning{% endif %}"><i class="bi {% if scheduler.available and not scheduler.error %}bi-broadcast-pin{% else %}bi-exclamation-triangle{% endif %} me-1"></i>{{ scheduler.label }}</span>
+    <a class="btn btn-outline-primary" href="{% url 'scheduler:dashboard' %}"><i class="bi bi-activity me-1"></i>Monitor</a>
+  </div>
+</div>
+
+{% if scheduler.error %}
+  <div class="alert alert-warning"><strong>Scheduler source unavailable.</strong> {{ scheduler.error }}</div>
+{% endif %}
+
+<section class="card upcoming-filter-card mb-4">
+  <div class="card-body d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-3">
+    <form class="d-flex flex-column flex-sm-row align-items-sm-end gap-2" method="get" action="{% url 'scheduler:upcoming' %}">
+      <div>
+        <label class="form-label mb-1" for="upcoming-from">Show dates after</label>
+        <input class="form-control" id="upcoming-from" name="from" type="date" value="{{ selected_from|date:'Y-m-d' }}">
+      </div>
+      <button class="btn btn-primary" type="submit"><i class="bi bi-funnel me-1"></i>Update view</button>
+    </form>
+    <div class="upcoming-source-note"><i class="bi bi-shield-lock me-1"></i><strong>Read-only scheduling view.</strong> The worker decides eligibility, queue order, and the exact execution start.</div>
+  </div>
+</section>
+
+{% if upcoming_groups %}
+  <div class="upcoming-processes" aria-label="Upcoming scheduler processes">
+    {% for group in upcoming_groups %}
+      <section class="upcoming-date-group">
+        <header class="upcoming-date-header">
+          <span class="date-chip date-chip-large" aria-hidden="true"><i class="bi bi-calendar2-week"></i></span>
+          <div><div class="page-eyebrow">Execution day</div><h2 class="section-heading fs-5 mb-0">{{ group.execution_date|indian_date }}</h2></div>
+          <span class="badge badge-soft-primary ms-auto">{{ group.schedules|length }} process{{ group.schedules|pluralize }}</span>
+        </header>
+        <div class="upcoming-process-list">
+          {% for schedule in group.schedules %}
+            <article class="upcoming-process-item">
+              <div class="upcoming-process-icon"><i class="bi bi-gear-wide-connected"></i></div>
+              <div class="min-w-0 flex-grow-1">
+                <div class="d-flex flex-column flex-sm-row justify-content-between gap-2 align-items-sm-start">
+                  <div class="min-w-0"><a class="fw-bold text-decoration-none fs-6" href="{% url 'scheduler:detail' schedule.id %}">{{ schedule.name }}</a>{% include "components/date_pair.html" with report_date=schedule.occurrence.report_date planned_date=schedule.occurrence.execution_date only %}<small class="d-block text-muted">{{ schedule.timing.window_label }}</small></div>
+                  <span class="badge {% if schedule.operational_state == 'READY' %}badge-soft-success{% elif schedule.operational_state == 'PAUSED' or schedule.operational_state == 'CANCELLED' or schedule.operational_state == 'DISABLED' %}badge-soft-warning{% else %}badge-soft-primary{% endif %}">{{ schedule.operational_state|state_label }}</span>
+                </div>
+                <div class="upcoming-process-meta"><span><i class="bi bi-clock me-1"></i>{{ schedule.timing.label }}</span>{% if schedule.occurrence.occurrence_date %}<span><i class="bi bi-calendar-event me-1"></i>Occurrence {{ schedule.occurrence.occurrence_date|indian_date }}</span>{% endif %}</div>
+                {% if schedule.lifecycle_state != 'READY' and schedule.occurrence.reason %}<div class="prequeue-inline"><strong>Not in priority queue yet.</strong> {{ schedule.occurrence.reason }}</div>{% endif %}
+                {% if schedule.timing.countdown_target %}<strong class="countdown d-inline-block mt-2" data-countdown-target="{{ schedule.timing.countdown_target }}" data-countdown-prefix="{{ schedule.timing.countdown_prefix }}" data-countdown-finished="Refresh scheduler status">{{ schedule.timing.countdown_prefix }} —</strong>{% endif %}
+              </div>
+              <a class="btn btn-sm btn-outline-primary upcoming-detail-link" href="{% url 'scheduler:detail' schedule.id %}">Open<span class="visually-hidden"> {{ schedule.name }}</span><i class="bi bi-arrow-right ms-1"></i></a>
+            </article>
+          {% endfor %}
+        </div>
+      </section>
+    {% endfor %}
+  </div>
+  {% if upcoming_plan|length >= plan_limit %}<p class="text-muted small mt-3 mb-0"><i class="bi bi-info-circle me-1"></i>Showing the first {{ plan_limit }} scheduler-supplied future occurrences. Narrow the start date or refresh after the next scheduler cycle for an updated view.</p>{% endif %}
+{% else %}
+  <section class="card"><div class="empty-state py-5"><i class="bi bi-calendar-plus"></i><h2 class="section-heading fs-5 mt-3">No future occurrence is persisted yet</h2><p class="mb-0 text-muted">The scheduler publishes an occurrence once it calculates a concrete execution date. This page will update when the next scheduler snapshot contains one.</p></div></section>
+{% endif %}
+{% endblock %}

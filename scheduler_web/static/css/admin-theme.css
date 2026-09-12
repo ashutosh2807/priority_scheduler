@@ -1,0 +1,167 @@
+/* Django admin has its own light/dark/auto switch and storage preference.
+   Only dark mode changes; use the installed admin's semantic variables. */
+html[data-theme="dark"] {
+    --primary: #303030;
+    --secondary: #181818;
+    --accent: #fff;
+    --primary-fg: #f5f5f5;
+    --body-fg: #eee;
+    --body-bg: #101010;
+    --body-quiet-color: #b8b8b8;
+    --body-medium-color: #d5d5d5;
+    --body-loud-color: #fff;
+    --header-color: #eee;
+    --header-branding-color: #fff;
+    --header-bg: #050505;
+    --header-link-color: #eee;
+    --breadcrumbs-fg: #bbb;
+    --breadcrumbs-link-fg: #eee;
+    --breadcrumbs-bg: #202020;
+    --link-fg: #ddd;
+    --link-hover-color: #fff;
+    --link-selected-fg: #fff;
+    --hairline-color: #333;
+    --border-color: #666;
+    --error-fg: #fff;
+    --message-debug-bg: #292929;
+    --message-info-bg: #292929;
+    --message-success-bg: #292929;
+    --message-warning-bg: #292929;
+    --message-error-bg: #292929;
+    --message-debug-icon: var(--itrp-debug-icon);
+    --message-info-icon: var(--itrp-info-icon);
+    --message-success-icon: var(--itrp-success-icon);
+    --message-warning-icon: var(--itrp-warning-icon);
+    --message-error-icon: var(--itrp-error-icon);
+    --darkened-bg: #1b1b1b;
+    --selected-bg: #292929;
+    --selected-row: #303030;
+    --button-fg: #101010;
+    --button-bg: #dedede;
+    --button-hover-bg: #fff;
+    --default-button-bg: #eee;
+    --default-button-hover-bg: #fff;
+    --close-button-bg: #ccc;
+    --close-button-hover-bg: #eee;
+    --delete-button-bg: #ccc;
+    --delete-button-hover-bg: #fff;
+    --object-tools-fg: #eee;
+    --object-tools-bg: #333;
+    --object-tools-hover-bg: #505050;
+    --itrp-admin-accent: #eee;
+    --itrp-admin-icon-filter: grayscale(1);
+}
+html[data-theme="dark"] .errornote { border-style: dashed; }
+html[data-theme="dark"] :is(a.deletelink, a.deletelink:hover, a.deletelink:focus, .deletelink-box a) { color: #eee; }
+html[data-theme="dark"] .submit-row a.deletelink { color: #111; }
+html[data-theme="dark"] code strong { color: #eee; }
+html[data-theme="dark"] .calendar table { background: var(--body-bg); }
+html[data-theme="dark"] .calendar td.selected a { background: #eee; color: #111; }
+html[data-theme="dark"] .addlink { background-image: var(--itrp-add-icon); }
+html[data-theme="dark"] :is(.viewlink, .inlineviewlink) { background-image: var(--itrp-view-icon); }
+html[data-theme="dark"] .hidelink { background-image: var(--itrp-hide-icon); }
+html[data-theme="dark"] :is(.changelink, .inlinechangelink) { background-image: var(--itrp-change-icon); }
+html[data-theme="dark"] .deletelink { background-image: var(--itrp-error-icon); }
+html[data-theme="dark"] .submit-row a.deletelink { background-image: none; }
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] {
+        --primary: #303030;
+        --secondary: #181818;
+        --accent: #fff;
+        --primary-fg: #f5f5f5;
+        --body-fg: #eee;
+        --body-bg: #101010;
+        --body-quiet-color: #b8b8b8;
+        --body-medium-color: #d5d5d5;
+        --body-loud-color: #fff;
+        --header-color: #eee;
+        --header-branding-color: #fff;
+        --header-bg: #050505;
+        --header-link-color: #eee;
+        --breadcrumbs-fg: #bbb;
+        --breadcrumbs-link-fg: #eee;
+        --breadcrumbs-bg: #202020;
+        --link-fg: #ddd;
+        --link-hover-color: #fff;
+        --link-selected-fg: #fff;
+        --hairline-color: #333;
+        --border-color: #666;
+        --error-fg: #fff;
+        --message-debug-bg: #292929;
+        --message-info-bg: #292929;
+        --message-success-bg: #292929;
+        --message-warning-bg: #292929;
+        --message-error-bg: #292929;
+        --message-debug-icon: var(--itrp-debug-icon);
+        --message-info-icon: var(--itrp-info-icon);
+        --message-success-icon: var(--itrp-success-icon);
+        --message-warning-icon: var(--itrp-warning-icon);
+        --message-error-icon: var(--itrp-error-icon);
+        --darkened-bg: #1b1b1b;
+        --selected-bg: #292929;
+        --selected-row: #303030;
+        --button-fg: #101010;
+        --button-bg: #dedede;
+        --button-hover-bg: #fff;
+        --default-button-bg: #eee;
+        --default-button-hover-bg: #fff;
+        --close-button-bg: #ccc;
+        --close-button-hover-bg: #eee;
+        --delete-button-bg: #ccc;
+        --delete-button-hover-bg: #fff;
+        --object-tools-fg: #eee;
+        --object-tools-bg: #333;
+        --object-tools-hover-bg: #505050;
+        --itrp-admin-accent: #eee;
+        --itrp-admin-icon-filter: grayscale(1);
+    }
+    html[data-theme="auto"] .errornote { border-style: dashed; }
+    html[data-theme="auto"] :is(a.deletelink, a.deletelink:hover, a.deletelink:focus, .deletelink-box a) { color: #eee; }
+    html[data-theme="auto"] .submit-row a.deletelink { color: #111; }
+    html[data-theme="auto"] code strong { color: #eee; }
+    html[data-theme="auto"] .calendar table { background: var(--body-bg); }
+    html[data-theme="auto"] .calendar td.selected a { background: #eee; color: #111; }
+    html[data-theme="auto"] .addlink { background-image: var(--itrp-add-icon); }
+    html[data-theme="auto"] :is(.viewlink, .inlineviewlink) { background-image: var(--itrp-view-icon); }
+    html[data-theme="auto"] .hidelink { background-image: var(--itrp-hide-icon); }
+    html[data-theme="auto"] :is(.changelink, .inlinechangelink) { background-image: var(--itrp-change-icon); }
+    html[data-theme="auto"] .deletelink { background-image: var(--itrp-error-icon); }
+    html[data-theme="auto"] .submit-row a.deletelink { background-image: none; }
+}
+
+/* Monochrome message symbols preserve meaning, rather than filtering a page
+   or any container that could change fixed positioning or overlay behavior. */
+:root {
+    --itrp-view-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 16 16'%3E%3Cpath d='M1 8q7-10 14 0Q8 18 1 8Z' fill='none' stroke='%23ddd' stroke-width='1.5'/%3E%3Ccircle cx='8' cy='8' r='2.3' fill='%23ddd'/%3E%3C/svg%3E");
+    --itrp-hide-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 16 16'%3E%3Cpath d='M1 8q7-10 14 0Q8 18 1 8Z' fill='none' stroke='%23ddd' stroke-width='1.5'/%3E%3Ccircle cx='8' cy='8' r='2.3' fill='%23ddd'/%3E%3Cpath d='m1 1 14 14' stroke='%23ddd' stroke-width='2'/%3E%3C/svg%3E");
+    --itrp-add-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 1v10M1 6h10' stroke='%23eee' stroke-width='2'/%3E%3C/svg%3E");
+    --itrp-change-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='m8 1 3 3-7 7H1V8Z' fill='none' stroke='%23ddd'/%3E%3C/svg%3E");
+    --itrp-info-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='none' stroke='%23ddd'/%3E%3Cpath d='M8 7v5' stroke='%23ddd' stroke-width='2'/%3E%3Ccircle cx='8' cy='4.5' r='1' fill='%23ddd'/%3E%3C/svg%3E");
+    --itrp-debug-icon: var(--itrp-info-icon);
+    --itrp-success-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='m2 8 4 4 8-8' fill='none' stroke='%23eee' stroke-width='2'/%3E%3C/svg%3E");
+    --itrp-warning-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M8 1 1 14h14Z' fill='none' stroke='%23eee'/%3E%3Cpath d='M8 5v4m0 2v1' stroke='%23eee' stroke-width='2'/%3E%3C/svg%3E");
+    --itrp-error-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='none' stroke='%23eee'/%3E%3Cpath d='m5 5 6 6m0-6-6 6' stroke='%23eee' stroke-width='2'/%3E%3C/svg%3E");
+}
+/* Unset custom properties fall back to the original light-mode appearance. */
+input { accent-color: var(--itrp-admin-accent, auto); }
+img[src*="/admin/img/icon-"] { filter: var(--itrp-admin-icon-filter, none); }
+
+/* Preserve the installed Django SVG sprite geometry and embedded licenses.
+   Only chromatic fills change; hover positions and hit areas remain native. */
+:root {
+    --itrp-clock-sprite: url("data:image/svg+xml,%3Csvg%20width%3D%2216%22%20height%3D%2232%22%20viewBox%3D%220%200%20512%201024%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%3E%0A%20%20%3C%21--%21Font%20Awesome%20Free%206.7.2%20by%20%40fontawesome%20-%20https%3A%2F%2Ffontawesome.com%20License%20-%20https%3A%2F%2Ffontawesome.com%2Flicense%2Ffree%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%0A%20%3Cdefs%3E%0A%20%20%20%20%3Cg%20id%3D%22icon%22%3E%0A%20%20%20%20%20%20%3C%21--%0A%20%20%20%20%20%20%20%20Icon%20Name%3A%20clock%0A%20%20%20%20%20%20%20%20Icon%20Family%3A%20classic%0A%20%20%20%20%20%20%20%20Icon%20Style%3A%20regular%0A%20%20%20%20%20%20--%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M464%20256A208%20208%200%201%201%2048%20256a208%20208%200%201%201%20416%200zM0%20256a256%20256%200%201%200%20512%200A256%20256%200%201%200%200%20256zM232%20120l0%20136c0%208%204%2015.5%2010.7%2020l96%2064c11%207.4%2025.9%204.4%2033.3-6.7s4.4-25.9-6.7-33.3L280%20243.2%20280%20120c0-13.3-10.7-24-24-24s-24%2010.7-24%2024z%22%2F%3E%0A%20%20%20%20%3C%2Fg%3E%0A%20%20%3C%2Fdefs%3E%0A%20%20%3Cuse%20xlink%3Ahref%3D%22%23icon%22%20x%3D%220%22%20y%3D%220%22%20fill%3D%22%23aaaaaa%22%2F%3E%0A%20%20%3Cuse%20xlink%3Ahref%3D%22%23icon%22%20x%3D%220%22%20y%3D%22512%22%20fill%3D%22%23eeeeee%22%20%2F%3E%0A%3C%2Fsvg%3E%0A");
+    --itrp-calendar-sprite: url("data:image/svg+xml,%3Csvg%20width%3D%2216%22%20height%3D%2232%22%20viewBox%3D%220%200%20448%201024%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%3E%0A%20%20%3C%21--%21Font%20Awesome%20Free%206.7.2%20by%20%40fontawesome%20-%20https%3A%2F%2Ffontawesome.com%20License%20-%20https%3A%2F%2Ffontawesome.com%2Flicense%2Ffree%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3Cg%20id%3D%22icon%22%3E%0A%20%20%20%20%20%20%3C%21--%0A%20%20%20%20%20%20%20%20Icon%20Name%3A%20calendar-days%0A%20%20%20%20%20%20%20%20Icon%20Family%3A%20classic%0A%20%20%20%20%20%20%20%20Icon%20Style%3A%20regular%0A%20%20%20%20%20%20--%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M152%2024c0-13.3-10.7-24-24-24s-24%2010.7-24%2024l0%2040L64%2064C28.7%2064%200%2092.7%200%20128l0%2016%200%2048L0%20448c0%2035.3%2028.7%2064%2064%2064l320%200c35.3%200%2064-28.7%2064-64l0-256%200-48%200-16c0-35.3-28.7-64-64-64l-40%200%200-40c0-13.3-10.7-24-24-24s-24%2010.7-24%2024l0%2040L152%2064l0-40zM48%20192l80%200%200%2056-80%200%200-56zm0%20104l80%200%200%2064-80%200%200-64zm128%200l96%200%200%2064-96%200%200-64zm144%200l80%200%200%2064-80%200%200-64zm80-48l-80%200%200-56%2080%200%200%2056zm0%20160l0%2040c0%208.8-7.2%2016-16%2016l-64%200%200-56%2080%200zm-128%200l0%2056-96%200%200-56%2096%200zm-144%200l0%2056-64%200c-8.8%200-16-7.2-16-16l0-40%2080%200zM272%20248l-96%200%200-56%2096%200%200%2056z%22%2F%3E%0A%20%20%20%20%3C%2Fg%3E%0A%20%20%3C%2Fdefs%3E%0A%20%20%3Cuse%20xlink%3Ahref%3D%22%23icon%22%20x%3D%220%22%20y%3D%220%22%20fill%3D%22%23aaaaaa%22%20%2F%3E%0A%20%20%3Cuse%20xlink%3Ahref%3D%22%23icon%22%20x%3D%220%22%20y%3D%22512%22%20fill%3D%22%23eeeeee%22%20%2F%3E%0A%3C%2Fsvg%3E%0A");
+    --itrp-selector-sprite: url("data:image/svg+xml,%3Csvg%20width%3D%2216%22%20height%3D%22128%22%20viewBox%3D%220%200%20512%204096%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%3E%0A%20%20%3C%21--%21Font%20Awesome%20Free%206.7.2%20by%20%40fontawesome%20-%20https%3A%2F%2Ffontawesome.com%20License%20-%20https%3A%2F%2Ffontawesome.com%2Flicense%2Ffree%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3Cg%20id%3D%22up%22%3E%0A%20%20%20%20%20%20%3C%21--%0A%20%20%20%20%20%20%20%20Icon%20Name%3A%20circle-arrow-up%0A%20%20%20%20%20%20%20%20Icon%20Family%3A%20classic%0A%20%20%20%20%20%20%20%20Icon%20Style%3A%20solid%0A%20%20%20%20%20%20--%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M256%20512A256%20256%200%201%200%20256%200a256%20256%200%201%200%200%20512zM385%20215c9.4%209.4%209.4%2024.6%200%2033.9s-24.6%209.4-33.9%200l-71-71L280%20392c0%2013.3-10.7%2024-24%2024s-24-10.7-24-24l0-214.1-71%2071c-9.4%209.4-24.6%209.4-33.9%200s-9.4-24.6%200-33.9L239%20103c9.4-9.4%2024.6-9.4%2033.9%200L385%20215z%22%2F%3E%0A%20%20%20%20%3C%2Fg%3E%0A%20%20%20%20%3Cg%20id%3D%22down%22%3E%0A%20%20%20%20%20%20%3C%21--%0A%20%20%20%20%20%20%20%20Icon%20Name%3A%20circle-arrow-down%0A%20%20%20%20%20%20%20%20Icon%20Family%3A%20classic%0A%20%20%20%20%20%20%20%20Icon%20Style%3A%20solid%0A%20%20%20%20%20%20--%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M256%200a256%20256%200%201%200%200%20512A256%20256%200%201%200%20256%200zM127%20297c-9.4-9.4-9.4-24.6%200-33.9s24.6-9.4%2033.9%200l71%2071L232%20120c0-13.3%2010.7-24%2024-24s24%2010.7%2024%2024l0%20214.1%2071-71c9.4-9.4%2024.6-9.4%2033.9%200s9.4%2024.6%200%2033.9L273%20409c-9.4%209.4-24.6%209.4-33.9%200L127%20297z%22%2F%3E%0A%20%20%20%20%3C%2Fg%3E%0A%20%20%20%20%3Cg%20id%3D%22right%22%3E%0A%20%20%20%20%20%20%3C%21--%0A%20%20%20%20%20%20%20%20Icon%20Name%3A%20circle-arrow-right%0A%20%20%20%20%20%20%20%20Icon%20Family%3A%20classic%0A%20%20%20%20%20%20%20%20Icon%20Style%3A%20solid%0A%20%20%20%20%20%20--%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M0%20256a256%20256%200%201%200%20512%200A256%20256%200%201%200%200%20256zM297%20385c-9.4%209.4-24.6%209.4-33.9%200s-9.4-24.6%200-33.9l71-71L120%20280c-13.3%200-24-10.7-24-24s10.7-24%2024-24l214.1%200-71-71c-9.4-9.4-9.4-24.6%200-33.9s24.6-9.4%2033.9%200L409%20239c9.4%209.4%209.4%2024.6%200%2033.9L297%20385z%22%2F%3E%0A%20%20%20%20%3C%2Fg%3E%0A%20%20%20%20%3Cg%20id%3D%22left%22%3E%0A%20%20%20%20%20%20%3C%21--%0A%20%20%20%20%20%20%20%20Icon%20Name%3A%20circle-arrow-left%0A%20%20%20%20%20%20%20%20Icon%20Family%3A%20classic%0A%20%20%20%20%20%20%20%20Icon%20Style%3A%20solid%0A%20%20%20%20%20%20--%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M512%20256A256%20256%200%201%200%200%20256a256%20256%200%201%200%20512%200zM215%20127c9.4-9.4%2024.6-9.4%2033.9%200s9.4%2024.6%200%2033.9l-71%2071L392%20232c13.3%200%2024%2010.7%2024%2024s-10.7%2024-24%2024l-214.1%200%2071%2071c9.4%209.4%209.4%2024.6%200%2033.9s-24.6%209.4-33.9%200L103%20273c-9.4-9.4-9.4-24.6%200-33.9L215%20127z%22%2F%3E%0A%20%20%20%20%3C%2Fg%3E%0A%20%20%3C%2Fdefs%3E%0A%20%20%3Cuse%20xlink%3Ahref%3D%22%23up%22%20x%3D%220%22%20y%3D%220%22%20fill%3D%22%23666666%22%20%2F%3E%0A%20%20%3Cuse%20xlink%3Ahref%3D%22%23up%22%20x%3D%220%22%20y%3D%22512%22%20fill%3D%22%23aaaaaa%22%20%2F%3E%0A%20%20%3Cuse%20xlink%3Ahref%3D%22%23down%22%20x%3D%220%22%20y%3D%221024%22%20fill%3D%22%23666666%22%20%2F%3E%0A%20%20%3Cuse%20xlink%3Ahref%3D%22%23down%22%20x%3D%220%22%20y%3D%221536%22%20fill%3D%22%23aaaaaa%22%20%2F%3E%0A%20%20%3Cuse%20xlink%3Ahref%3D%22%23left%22%20x%3D%220%22%20y%3D%222048%22%20fill%3D%22%23666666%22%20%2F%3E%0A%20%20%3Cuse%20xlink%3Ahref%3D%22%23left%22%20x%3D%220%22%20y%3D%222560%22%20fill%3D%22%23aaaaaa%22%20%2F%3E%0A%20%20%3Cuse%20xlink%3Ahref%3D%22%23right%22%20x%3D%220%22%20y%3D%223072%22%20fill%3D%22%23666666%22%20%2F%3E%0A%20%20%3Cuse%20xlink%3Ahref%3D%22%23right%22%20x%3D%220%22%20y%3D%223584%22%20fill%3D%22%23aaaaaa%22%20%2F%3E%0A%3C%2Fsvg%3E%0A");
+    --itrp-sorting-sprite: url("data:image/svg+xml,%3Csvg%20width%3D%2214%22%20height%3D%2284%22%20viewBox%3D%220%200%20512%203072%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%3E%0A%20%20%3C%21--%21Font%20Awesome%20Free%206.7.2%20by%20%40fontawesome%20-%20https%3A%2F%2Ffontawesome.com%20License%20-%20https%3A%2F%2Ffontawesome.com%2Flicense%2Ffree%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3Cg%20id%3D%22sort%22%3E%0A%20%20%20%20%20%20%3C%21--%0A%20%20%20%20%20%20%20%20Icon%20Name%3A%20sort%0A%20%20%20%20%20%20%20%20Icon%20Family%3A%20classic%0A%20%20%20%20%20%20%20%20Icon%20Style%3A%20solid%0A%20%20%20%20%20%20--%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M137.4%2041.4c12.5-12.5%2032.8-12.5%2045.3%200l128%20128c9.2%209.2%2011.9%2022.9%206.9%2034.9s-16.6%2019.8-29.6%2019.8L32%20224c-12.9%200-24.6-7.8-29.6-19.8s-2.2-25.7%206.9-34.9l128-128zm0%20429.3l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8%2029.6-19.8l256%200c12.9%200%2024.6%207.8%2029.6%2019.8s2.2%2025.7-6.9%2034.9l-128%20128c-12.5%2012.5-32.8%2012.5-45.3%200z%22%2F%3E%0A%20%20%20%20%3C%2Fg%3E%0A%20%20%20%20%3Cg%20id%3D%22ascending%22%3E%0A%20%20%20%20%20%20%3C%21--%0A%20%20%20%20%20%20%20%20Icon%20Name%3A%20sort-up%0A%20%20%20%20%20%20%20%20Icon%20Family%3A%20classic%0A%20%20%20%20%20%20%20%20Icon%20Style%3A%20solid%0A%20%20%20%20%20%20--%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M182.6%2041.4c-12.5-12.5-32.8-12.5-45.3%200l-128%20128c-9.2%209.2-11.9%2022.9-6.9%2034.9s16.6%2019.8%2029.6%2019.8l256%200c12.9%200%2024.6-7.8%2029.6-19.8s2.2-25.7-6.9-34.9l-128-128z%22%2F%3E%0A%20%20%20%20%3C%2Fg%3E%0A%20%20%20%20%3Cg%20id%3D%22descending%22%3E%0A%20%20%20%20%20%20%3C%21--%0A%20%20%20%20%20%20%20%20Icon%20Name%3A%20sort-down%0A%20%20%20%20%20%20%20%20Icon%20Family%3A%20classic%0A%20%20%20%20%20%20%20%20Icon%20Style%3A%20solid%0A%20%20%20%20%20%20--%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M182.6%20470.6c-12.5%2012.5-32.8%2012.5-45.3%200l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8%2029.6-19.8l256%200c12.9%200%2024.6%207.8%2029.6%2019.8s2.2%2025.7-6.9%2034.9l-128%20128z%22%2F%3E%0A%20%20%20%20%3C%2Fg%3E%0A%20%20%3C%2Fdefs%3E%0A%20%20%3Cuse%20xlink%3Ahref%3D%22%23sort%22%20x%3D%220%22%20y%3D%220%22%20fill%3D%22%23999999%22%20%2F%3E%0A%20%20%3Cuse%20xlink%3Ahref%3D%22%23sort%22%20x%3D%220%22%20y%3D%22512%22%20fill%3D%22%23aaaaaa%22%20%2F%3E%0A%20%20%3Cuse%20xlink%3Ahref%3D%22%23ascending%22%20x%3D%220%22%20y%3D%221024%22%20fill%3D%22%23999999%22%20%2F%3E%0A%20%20%3Cuse%20xlink%3Ahref%3D%22%23ascending%22%20x%3D%220%22%20y%3D%221536%22%20fill%3D%22%23aaaaaa%22%20%2F%3E%0A%20%20%3Cuse%20xlink%3Ahref%3D%22%23descending%22%20x%3D%220%22%20y%3D%222048%22%20fill%3D%22%23999999%22%20%2F%3E%0A%20%20%3Cuse%20xlink%3Ahref%3D%22%23descending%22%20x%3D%220%22%20y%3D%222560%22%20fill%3D%22%23aaaaaa%22%20%2F%3E%0A%3C%2Fsvg%3E%0A");
+}
+html[data-theme="dark"] .datetimeshortcuts .clock-icon { background-image: var(--itrp-clock-sprite); }
+html[data-theme="dark"] .datetimeshortcuts .date-icon { background-image: var(--itrp-calendar-sprite); }
+html[data-theme="dark"] :is(.selector-add, .selector-remove) { background-image: var(--itrp-selector-sprite); }
+html[data-theme="dark"] table thead th.sorted .sortoptions a { background-image: var(--itrp-sorting-sprite); }
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .datetimeshortcuts .clock-icon { background-image: var(--itrp-clock-sprite); }
+    html[data-theme="auto"] .datetimeshortcuts .date-icon { background-image: var(--itrp-calendar-sprite); }
+    html[data-theme="auto"] :is(.selector-add, .selector-remove) { background-image: var(--itrp-selector-sprite); }
+    html[data-theme="auto"] table thead th.sorted .sortoptions a { background-image: var(--itrp-sorting-sprite); }
+}

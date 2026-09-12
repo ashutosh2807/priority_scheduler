@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if object %}
+        Edit Task
+    {% else %}
+        Create Task
+    {% endif %}
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid py-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="mb-1">
+                {% if object %}
+                    Edit Task
+                {% else %}
+                    Create Task
+                {% endif %}
+            </h2>
+
+            <p class="text-muted mb-0">
+                {% if object %}
+                    Update the task information.
+                {% else %}
+                    Create a new task for the operations system.
+                {% endif %}
+            </p>
+        </div>
+
+        <div>
+            <a
+                href="{% url 'tasks:list' %}"
+                class="btn btn-outline-secondary"
+            >
+                Back to Tasks
+            </a>
+        </div>
+
+    </div>
+
+
+    <!-- Form Card -->
+    <div class="card shadow-sm">
+
+        <div class="card-header bg-white">
+
+            <h5 class="mb-0">
+                Task Information
+            </h5>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <form method="post" novalidate>
+
+                {% csrf_token %}
+
+
+                <!-- Non-field errors -->
+
+                {% if form.non_field_errors %}
+
+                    <div class="alert alert-danger">
+
+                        {% for error in form.non_field_errors %}
+
+                            <div>
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- Task Name -->
+
+                <div class="mb-3">
+
+                    <label
+                        for="{{ form.name.id_for_label }}"
+                        class="form-label"
+                    >
+                        Task Name
+                        <span class="text-danger">*</span>
+                    </label>
+
+                    {{ form.name }}
+
+                    {% if form.name.errors %}
+
+                        <div class="text-danger small mt-1">
+
+                            {% for error in form.name.errors %}
+                                {{ error }}
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Description -->
+
+                <div class="mb-3">
+
+                    <label
+                        for="{{ form.description.id_for_label }}"
+                        class="form-label"
+                    >
+                        Description
+                    </label>
+
+                    {{ form.description }}
+
+                    {% if form.description.errors %}
+
+                        <div class="text-danger small mt-1">
+
+                            {% for error in form.description.errors %}
+                                {{ error }}
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Status -->
+
+                <div class="mb-3">
+
+                    <label
+                        for="{{ form.status.id_for_label }}"
+                        class="form-label"
+                    >
+                        Status
+                        <span class="text-danger">*</span>
+                    </label>
+
+                    {{ form.status }}
+
+                    {% if form.status.errors %}
+
+                        <div class="text-danger small mt-1">
+
+                            {% for error in form.status.errors %}
+                                {{ error }}
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Owner -->
+
+                <div class="mb-4">
+
+                    <label
+                        for="{{ form.owner.id_for_label }}"
+                        class="form-label"
+                    >
+                        Task Owner
+                        <span class="text-danger">*</span>
+                    </label>
+
+                    {{ form.owner }}
+
+                    {% if form.owner.errors %}
+
+                        <div class="text-danger small mt-1">
+
+                            {% for error in form.owner.errors %}
+                                {{ error }}
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Actions -->
+
+                <div class="d-flex justify-content-end gap-2">
+
+                    <a
+                        href="{% url 'tasks:list' %}"
+                        class="btn btn-outline-secondary"
+                    >
+                        Cancel
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        {% if object %}
+                            Update Task
+                        {% else %}
+                            Create Task
+                        {% endif %}
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

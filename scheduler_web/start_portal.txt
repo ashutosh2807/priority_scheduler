@@ -1,0 +1,49 @@
+@echo off
+setlocal EnableExtensions
+cd /d "%~dp0"
+set "PYTHON_EXE="
+if defined SCHEDULER_PYTHON (
+    set "PYTHON_EXE=%SCHEDULER_PYTHON%"
+    call :validate_python
+    if not defined PYTHON_EXE (
+        echo SCHEDULER_PYTHON must point to Python 3.10 or newer with Django and python-dotenv installed.
+        pause
+        exit /b 9009
+    )
+)
+if not defined PYTHON_EXE (
+    set "PYTHON_EXE=%~dp0..\.scheduler-venv\Scripts\python.exe"
+    call :validate_python
+)
+if not defined PYTHON_EXE (
+    set "PYTHON_EXE=%~dp0..\scheduler_project\venv\Scripts\python.exe"
+    call :validate_python
+)
+if not defined PYTHON_EXE (
+    if defined VIRTUAL_ENV (
+        set "PYTHON_EXE=%VIRTUAL_ENV%\Scripts\python.exe"
+        call :validate_python
+    )
+)
+if not defined PYTHON_EXE (
+    echo No compatible project Python environment found. See OFFICE_DEPLOYMENT.md for setup.
+    pause
+    exit /b 9009
+)
+if /I "%~1"=="--check" (
+    "%PYTHON_EXE%" "%~dp0check_environment.py"
+) else (
+    "%PYTHON_EXE%" "%~dp0run_portal.py" %*
+)
+set "EXIT_CODE=%ERRORLEVEL%"
+if not "%EXIT_CODE%"=="0" pause
+exit /b %EXIT_CODE%
+
+:validate_python
+if not exist "%PYTHON_EXE%" (
+    set "PYTHON_EXE="
+    exit /b 0
+)
+"%PYTHON_EXE%" -c "import sys; assert sys.version_info >= (3, 10); import django, dotenv" >nul 2>&1
+if errorlevel 1 set "PYTHON_EXE="
+exit /b 0

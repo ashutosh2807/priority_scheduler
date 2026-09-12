@@ -1,0 +1,5 @@
+# The portal deliberately has a small dependency surface.  The Oracle client
+# lives in scheduler_project; this process only talks to its authenticated
+# loopback control API.
+Django>=5.2,<6.2
+python-dotenv>=1.0,<2.0

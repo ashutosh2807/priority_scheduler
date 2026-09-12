@@ -1,0 +1,12 @@
+django_app/
+	setup_scheduler_environment.bat
+	run_portal.bat
+	scheduler_web/
+		C:\Users\ashur\OneDrive\Desktop\New folder (2)\django_app\scheduler_web\start_portal.bat
+
+scheduler_project/
+C:\Users\ashur\OneDrive\Desktop\New folder (2)\django_app\scheduler_project
+
+1. run_scheduler_service
+2. schedulerctl
+3. run_scheduler_cycle

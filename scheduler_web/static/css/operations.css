@@ -1,0 +1,321 @@
+.prequeue-inline {
+    margin-top: .65rem;
+    padding: .5rem .7rem;
+    border-left: 3px solid #d99500;
+    border-radius: 0 8px 8px 0;
+    background: #fff8e7;
+    color: #72520a;
+    font-size: .8rem;
+}
+
+.prequeue-callout {
+    padding: .8rem;
+    border: 1px solid #f0cd78;
+    border-radius: 10px;
+    background: #fff9ec;
+    color: #674d10;
+}
+
+.prequeue-callout a {
+    color: #245984;
+}
+
+.coverage-card {
+    border-color: #c8dce9;
+}
+
+.coverage-availability {
+    background: #f5faff;
+}
+
+.coverage-card .table td,
+.coverage-card .table th {
+    vertical-align: middle;
+}
+
+.coverage-card .user-avatar {
+    flex: 0 0 auto;
+}
+
+/* Progressive page updates keep the familiar Django shell while avoiding a
+   visual full-page reload for ordinary internal navigation and controls. */
+.spa-loading #app-content {
+    cursor: progress;
+}
+
+/* Keep dialogs, navigation and notifications usable while a request runs. */
+.spa-loading::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #00a7dc;
+    z-index: 1100;
+    pointer-events: none;
+}
+
+#app-content:focus {
+    outline: none;
+}
+
+.upcoming-filter-card {
+    border-color: #c9dceb;
+    background: linear-gradient(110deg, #f7fbff, #fff);
+}
+
+.upcoming-source-note {
+    max-width: 42rem;
+    color: #486581;
+    font-size: .86rem;
+}
+
+.upcoming-processes {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.upcoming-date-group {
+    overflow: hidden;
+    border: 1px solid #dce7f0;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 8px 24px rgb(16 42 67 / 5%);
+}
+
+.upcoming-date-header {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .9rem 1rem;
+    border-bottom: 1px solid #e5edf4;
+    background: #f8fbfe;
+}
+
+.date-chip-large {
+    flex-basis: 48px;
+    min-height: 48px;
+    padding: .3rem;
+}
+
+.upcoming-process-list {
+    display: grid;
+}
+
+.upcoming-process-item {
+    display: flex;
+    align-items: flex-start;
+    gap: .9rem;
+    padding: 1rem;
+    border-bottom: 1px solid #edf2f6;
+}
+
+.upcoming-process-item:last-child {
+    border-bottom: 0;
+}
+
+.upcoming-process-icon {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    place-items: center;
+    border-radius: 10px;
+    color: #0d5d9f;
+    background: #e9f4ff;
+}
+
+.upcoming-process-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem 1rem;
+    margin-top: .6rem;
+    color: #526f88;
+    font-size: .81rem;
+}
+
+.upcoming-detail-link {
+    flex: 0 0 auto;
+    min-height: 34px;
+}
+
+/* The scheduler control stack is intentionally touch-friendly.  The narrow
+   sidebar turns the override actions into full-width rows before labels can
+   collide or overlay each other. */
+.col-xl-4 > .card .d-grid.gap-2 > form,
+.col-xl-4 > .card .d-grid.gap-2 > button {
+    min-width: 0;
+}
+
+.col-xl-4 > .card .d-grid.gap-2 .btn {
+    min-height: 2.55rem;
+    white-space: normal;
+}
+
+@media (max-width: 575.98px) {
+    .upcoming-date-header {
+        align-items: flex-start;
+    }
+
+    .upcoming-date-header .badge {
+        margin-left: 0 !important;
+    }
+
+    .upcoming-process-item {
+        flex-wrap: wrap;
+    }
+
+    .upcoming-process-item > .flex-grow-1 {
+        min-width: calc(100% - 46px);
+    }
+
+    .upcoming-detail-link {
+        width: 100%;
+    }
+
+    .col-xl-4 > .card .row.g-2 > .col-7,
+    .col-xl-4 > .card .row.g-2 > .col-5 {
+        width: 100%;
+    }
+}
+
+.service-control-card {
+    border-color: #bcd7eb;
+}
+
+.service-control-summary {
+    display: flex;
+    align-items: flex-start;
+    gap: .85rem;
+    color: #486581;
+    font-size: .88rem;
+}
+
+.service-control-summary strong {
+    color: #243b53;
+}
+
+.service-control-icon {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    place-items: center;
+    border-radius: 50%;
+    color: #876000;
+    background: #fff1c7;
+}
+
+.service-control-icon.running {
+    color: #087443;
+    background: #dff7e9;
+}
+
+.service-control-form {
+    max-width: 48rem;
+}
+
+.service-control-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: .6rem;
+}
+
+.service-control-actions .btn {
+    min-height: 2.55rem;
+    white-space: nowrap;
+}
+
+.service-audit-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    padding: .8rem 1rem;
+    border-bottom: 1px solid #e6eef5;
+    background: #f8fbfe;
+}
+
+.service-audit-item {
+    display: flex;
+    align-items: flex-start;
+    gap: .7rem;
+}
+
+.service-audit-icon {
+    display: grid;
+    width: 28px;
+    height: 28px;
+    flex: 0 0 28px;
+    place-items: center;
+    border-radius: 8px;
+    color: #0d5d9f;
+    background: #e9f4ff;
+}
+
+@media (max-width: 575.98px) {
+    .service-control-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .service-control-actions .btn {
+        width: 100%;
+    }
+}
+
+.master-config-card {
+    border-color: #c8dce9;
+}
+
+.master-config-allowed,
+.master-config-protected {
+    display: flex;
+    align-items: flex-start;
+    gap: .65rem;
+    min-height: 100%;
+    padding: .8rem;
+    border: 1px solid #d8e7f1;
+    border-radius: 10px;
+    background: #f8fcff;
+}
+
+.master-config-allowed > i,
+.master-config-protected > i {
+    margin-top: .1rem;
+    font-size: 1.1rem;
+}
+
+.master-config-allowed > i {
+    color: #09814a;
+}
+
+.master-config-protected > i {
+    color: #41627e;
+}
+
+.master-config-allowed strong,
+.master-config-protected strong,
+.master-config-allowed span,
+.master-config-protected span {
+    display: block;
+}
+
+.master-config-allowed span,
+.master-config-protected span {
+    margin-top: .15rem;
+    color: #526f88;
+    font-size: .83rem;
+}
+
+.master-active-check {
+    padding: .95rem 1rem  .95rem 2.2rem;
+    border: 1px solid #d8e7f1;
+    border-radius: 10px;
+    background: #f8fcff;
+}
+
+.master-active-check .form-check-input {
+    margin-top: .2rem;
+}
+

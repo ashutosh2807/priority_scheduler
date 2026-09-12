@@ -1,0 +1,49 @@
+/* Shared presentation controls for tables and dashboard timelines. */
+.table-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+    padding: 14px 20px;
+    border-top: 1px solid var(--line);
+    border-radius: 0 0 var(--radius) var(--radius);
+    background: #f8fafc;
+    margin-top: auto;
+    scroll-margin-top: 90px;
+}
+.table-pagination-summary {
+    color: var(--muted);
+    font-size: .78rem;
+    font-variant-numeric: tabular-nums;
+}
+.table-pagination-summary strong { color: var(--ink); font-weight: 650; }
+.table-pagination .pagination { flex-wrap: wrap; gap: 5px; }
+.table-pagination .page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    min-height: 32px;
+    padding: 5px 10px;
+    margin: 0;
+    border: 1px solid var(--line);
+    border-radius: 6px !important;
+    background: #fff;
+    color: #145e9b;
+    font-size: .78rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+.table-pagination .page-link:hover { background: #e8f1fb; border-color: #a8c4df; }
+.table-pagination .active .page-link { background: #1267ae; border-color: #1267ae; color: #fff; }
+.table-pagination .disabled .page-link { color: #8999aa; background: transparent; border-color: transparent; }
+.table-pagination .pagination-gap { min-width: 18px; padding-inline: 2px; }
+.table-pagination .page-link:focus-visible { outline: 3px solid #00a7dc; outline-offset: 2px; box-shadow: none; }
+.pagination-focus-target { scroll-margin-top: 90px; }
+.pagination-focus-target:focus { outline: none; }
+@media (max-width: 575.98px) {
+    .table-pagination { padding: 12px; gap: 10px; }
+    .table-pagination nav { max-width: 100%; }
+}
+@media print { .table-pagination nav { display: none; } }

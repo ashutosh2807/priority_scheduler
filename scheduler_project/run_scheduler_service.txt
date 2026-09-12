@@ -1,0 +1,92 @@
+@echo off
+setlocal EnableExtensions DisableDelayedExpansion
+
+REM Continuous worker and control API. Register once at startup, never every
+REM five minutes. Keep this foreground process tracked by Task Scheduler.
+cd /d "%~dp0"
+if errorlevel 1 exit /b 1
+if not exist "%~dp0logs" mkdir "%~dp0logs" 2>nul
+set "SERVICE_LOG=%~dp0logs\scheduler_service.log"
+echo [%date% %time%] Scheduler service launcher invoked.>> "%SERVICE_LOG%"
+if errorlevel 1 (
+    echo Cannot write scheduler service log. Check the task account's project permissions. 1>&2
+    exit /b 1
+)
+echo ITRP scheduler service launcher.
+echo Worker output is appended to "%SERVICE_LOG%".
+
+set "SERVICE_ARGS="
+:check_arguments
+if "%~1"=="" if "%1"=="" goto arguments_ready
+if /I "%~1"=="--monitor" (
+    set "SERVICE_ARGS=%SERVICE_ARGS% --monitor"
+    shift
+    goto check_arguments
+)
+if /I "%~1"=="--help" (
+    set "SERVICE_ARGS=%SERVICE_ARGS% --help"
+    shift
+    goto check_arguments
+)
+echo Only --monitor and --help are supported. This launcher always runs continuously with its control API and Oracle sources.>> "%SERVICE_LOG%"
+echo Only --monitor and --help are supported. This launcher always runs continuously with its control API and Oracle sources. 1>&2
+exit /b 2
+
+:arguments_ready
+set "PYTHON_EXE="
+if defined SCHEDULER_PYTHON (
+    set "PYTHON_EXE=%SCHEDULER_PYTHON%"
+    call :validate_python
+    if not defined PYTHON_EXE (
+        echo SCHEDULER_PYTHON must point to Python 3.10 or newer with python-dotenv installed.>> "%SERVICE_LOG%"
+        echo SCHEDULER_PYTHON must point to Python 3.10 or newer with python-dotenv installed. 1>&2
+        exit /b 9009
+    )
+)
+if not defined PYTHON_EXE (
+    set "PYTHON_EXE=%~dp0..\.scheduler-venv\Scripts\python.exe"
+    call :validate_python
+)
+if not defined PYTHON_EXE (
+    set "PYTHON_EXE=%~dp0venv\Scripts\python.exe"
+    call :validate_python
+)
+if not defined PYTHON_EXE (
+    if defined VIRTUAL_ENV (
+        set "PYTHON_EXE=%VIRTUAL_ENV%\Scripts\python.exe"
+        call :validate_python
+    )
+)
+if not defined PYTHON_EXE (
+    echo No compatible project Python environment found. Configure SCHEDULER_PYTHON or install the project requirements.>> "%SERVICE_LOG%"
+    echo No compatible project Python environment found. Configure SCHEDULER_PYTHON or install the project requirements. 1>&2
+    exit /b 9009
+)
+
+set "SCHEDULER_MASTER_SOURCE=oracle"
+set "SCHEDULER_CALENDAR_SOURCE=oracle"
+set "SCHEDULER_API_ENABLED=1"
+echo [%date% %time%] Starting continuous scheduler and control API.>> "%SERVICE_LOG%"
+echo Starting continuous scheduler and control API. This window stays open while this process runs.
+"%PYTHON_EXE%" -u "%~dp0main.py" --calendar-source oracle %SERVICE_ARGS% >> "%SERVICE_LOG%" 2>&1
+set "EXIT_CODE=%ERRORLEVEL%"
+echo [%date% %time%] Scheduler service stopped with exit code %EXIT_CODE%.>> "%SERVICE_LOG%"
+echo Scheduler process ended with exit code %EXIT_CODE%. Current launch output follows:
+REM Display only this invocation when it fits in the bounded log tail. This
+REM includes the single-instance skip reason, startup errors and complete help.
+REM Save the worker exit code above: diagnostics must never replace that result.
+"%PYTHON_EXE%" -c "import locale, os, sys; f=open(sys.argv[1], 'rb'); f.seek(0, 2); f.seek(max(0, f.tell()-65536)); data=f.read(65536); f.close(); encoding=os.getenv('PYTHONIOENCODING', '').split(':')[0] or locale.getpreferredencoding(False); lines=data.decode(encoding, errors='replace').splitlines(); markers=[i for i, line in enumerate(lines) if line.endswith('] Scheduler service launcher invoked.')]; output=lines[markers[-1]+1:] if markers else lines[-12:]; sys.stdout.reconfigure(errors='backslashreplace'); print('\n'.join(output))" "%SERVICE_LOG%"
+exit /b %EXIT_CODE%
+
+:validate_python
+if /I not "%PYTHON_EXE:~-4%"==".exe" (
+    set "PYTHON_EXE="
+    exit /b 0
+)
+if not exist "%PYTHON_EXE%" (
+    set "PYTHON_EXE="
+    exit /b 0
+)
+"%PYTHON_EXE%" -c "import sys; assert sys.version_info >= (3, 10); import dotenv" >nul 2>&1
+if errorlevel 1 set "PYTHON_EXE="
+exit /b 0

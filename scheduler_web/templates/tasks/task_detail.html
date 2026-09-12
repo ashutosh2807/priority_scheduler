@@ -1,0 +1,751 @@
+{% extends "base.html" %}{% load table_pagination %}
+
+{% block title %}{{ task.name }}{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid py-4">
+
+    <!-- ===================================================== -->
+    <!-- MESSAGES                                              -->
+    <!-- ===================================================== -->
+
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <div
+                class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show"
+                role="alert"
+            >
+                {{ message }}
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"
+                ></button>
+
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+
+    <!-- ===================================================== -->
+    <!-- HEADER                                                -->
+    <!-- ===================================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="mb-1">
+                {{ task.name }}
+            </h2>
+
+            <p class="text-muted mb-0">
+                Task details and operational information
+            </p>
+
+        </div>
+
+
+        <div class="d-flex gap-2">
+
+            <a
+                href="{% url 'tasks:edit' task.pk %}"
+                class="btn btn-primary"
+            >
+                Edit Task
+            </a>
+
+            <a
+                href="{% url 'tasks:list' %}"
+                class="btn btn-outline-secondary"
+            >
+                Back to Tasks
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- BASIC TASK INFORMATION                                -->
+    <!-- ===================================================== -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header bg-white">
+
+            <h5 class="mb-0">
+                Task Information
+            </h5>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="row g-4">
+
+
+                <!-- Task Name -->
+
+                <div class="col-md-6">
+
+                    <div class="text-muted small">
+                        Task Name
+                    </div>
+
+                    <div class="fw-semibold">
+                        {{ task.name }}
+                    </div>
+
+                </div>
+
+
+                <!-- Status -->
+
+                <div class="col-md-6">
+
+                    <div class="text-muted small">
+                        Status
+                    </div>
+
+                    <div>
+
+                        {% if task.status == "ACTIVE" %}
+
+                            <span class="badge bg-success">
+                                Active
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-secondary">
+                                Inactive
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Owner -->
+
+                <div class="col-md-6">
+
+                    <div class="text-muted small">
+                        Task Owner
+                    </div>
+
+                    <div class="fw-semibold">
+                        {{ task.owner.display_name }}
+                    </div>
+
+                    <div class="small text-muted">
+                        {{ task.owner.employee_id }}
+                    </div>
+
+                </div>
+
+
+                <!-- Created -->
+
+                <div class="col-md-3">
+
+                    <div class="text-muted small">
+                        Created
+                    </div>
+
+                    <div>
+                        {{ task.created_at|indian_datetime }}
+                    </div>
+
+                </div>
+
+
+                <!-- Updated -->
+
+                <div class="col-md-3">
+
+                    <div class="text-muted small">
+                        Last Updated
+                    </div>
+
+                    <div>
+                        {{ task.updated_at|indian_datetime }}
+                    </div>
+
+                </div>
+
+
+                <!-- Description -->
+
+                <div class="col-12">
+
+                    <div class="text-muted small mb-1">
+                        Description
+                    </div>
+
+                    {% if task.description %}
+
+                        <div>
+                            {{ task.description|linebreaks }}
+                        </div>
+
+                    {% else %}
+
+                        <span class="text-muted">
+                            No description provided.
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="card mb-4 border-primary-subtle">
+        <div class="card-body d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+            <div>
+                <div class="page-eyebrow">Current responsibility</div>
+                {% if responsibility %}
+                    <div class="h4 mb-1">{{ responsibility.admin.display_name }}</div>
+                    <div class="text-muted">Effective on {{ responsibility.date|indian_date }} via <span class="badge badge-soft-primary">{{ responsibility.source|title }}</span></div>
+                    {% if responsibility.delegation %}<small class="text-muted d-block mt-1">Delegated from {{ responsibility.delegation.from_admin.display_name }} until {{ responsibility.delegation.end_date|indian_date }}</small>{% endif %}
+                {% else %}
+                    <div class="text-danger fw-semibold">Responsibility needs review</div>
+                    <div class="text-muted">More than one active delegation applies to today.</div>
+                {% endif %}
+            </div>
+            <a class="btn btn-outline-primary" href="{% url 'dashboard:calendar' %}"><i class="bi bi-calendar3 me-1"></i>View calendar</a>
+        </div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- ASSIGNED ADMINISTRATORS                               -->
+    <!-- ===================================================== -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header bg-white">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <h5 class="mb-0">
+                    Assigned Administrators
+                </h5>
+
+                <a
+                    href="{% url 'tasks:assignment-create' task.pk %}"
+                    class="btn btn-sm btn-primary"
+                >
+                    + Assign Administrator
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-body p-0">
+
+            {% with assignments=task.assignments.all %}
+                {% table_page assignments 'assignments_page' 10 as assignments_page %}
+
+                {% if assignments_page %}
+
+                    <div class="table-responsive">
+
+                        <table class="table table-hover align-middle mb-0">
+
+                            <thead class="table-light">
+
+                                <tr>
+
+                                    <th>
+                                        Administrator
+                                    </th>
+
+                                    <th>
+                                        Employee ID
+                                    </th>
+
+                                    <th>
+                                        Role
+                                    </th>
+
+                                    <th>
+                                        Assignment
+                                    </th>
+
+                                    <th>
+                                        Assigned At
+                                    </th>
+
+                                    <th class="text-end">
+                                        Actions
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                {% for assignment in assignments_page %}
+
+                                    <tr>
+
+                                        <td class="fw-semibold">
+                                            {{ assignment.admin.display_name }}
+                                        </td>
+
+
+                                        <td>
+                                            {{ assignment.admin.employee_id }}
+                                        </td>
+
+
+                                        <td>
+                                            {{ assignment.admin.role }}
+                                        </td>
+
+
+                                        <td>
+
+                                            {% if assignment.is_primary %}
+
+                                                <span class="badge bg-primary">
+                                                    Primary
+                                                </span>
+
+                                            {% else %}
+
+                                                <span class="badge bg-light text-dark border">
+                                                    Secondary
+                                                </span>
+
+                                            {% endif %}
+
+                                        </td>
+
+
+                                        <td>
+                                            {{ assignment.assigned_at|indian_datetime }}
+                                        </td>
+
+
+                                        <td class="text-end">
+
+                                            <div class="d-flex justify-content-end gap-2">
+
+
+                                                {% if not assignment.is_primary %}
+
+                                                    <form
+                                                        method="post"
+                                                        action="{% url 'tasks:assignment-primary' task.pk assignment.pk %}"
+                                                    >
+
+                                                        {% csrf_token %}
+
+                                                        <button
+                                                            type="submit"
+                                                            class="btn btn-sm btn-outline-primary"
+                                                        >
+                                                            Make Primary
+                                                        </button>
+
+                                                    </form>
+
+                                                {% endif %}
+
+
+                                                <form
+                                                    method="post"
+                                                    action="{% url 'tasks:assignment-delete' task.pk assignment.pk %}"
+                                                    onsubmit="return confirm('Remove this administrator from the task?');"
+                                                >
+
+                                                    {% csrf_token %}
+
+                                                    <button
+                                                        type="submit"
+                                                        class="btn btn-sm btn-outline-danger"
+                                                    >
+                                                        Remove
+                                                    </button>
+
+                                                </form>
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                {% else %}
+
+                    <div class="text-center text-muted py-5">
+
+                        <div class="mb-2">
+                            No administrators assigned.
+                        </div>
+
+                        <a
+                            href="{% url 'tasks:assignment-create' task.pk %}"
+                            class="btn btn-sm btn-primary"
+                        >
+                            Assign Administrator
+                        </a>
+
+                    </div>
+
+                {% endif %}
+
+                {% render_table_pagination assignments_page 'assignments_page' 'Task assignments' %}
+
+            {% endwith %}
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ===================================================== -->
+    <!-- DELEGATIONS                                           -->
+    <!-- ===================================================== -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header bg-white">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <h5 class="mb-0">
+                    Task Delegations
+                </h5>
+
+                <a
+                    href="{% url 'tasks:delegation-create' task.pk %}"
+                    class="btn btn-sm btn-primary"
+                >
+                    + Create Delegation
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-body p-0">
+
+            {% with delegations=task.delegations.all %}
+                {% table_page delegations 'delegations_page' 10 as delegations_page %}
+
+                {% if delegations_page %}
+
+                    <div class="table-responsive">
+
+                        <table class="table table-hover align-middle mb-0">
+
+                            <thead class="table-light">
+
+                                <tr>
+
+                                    <th>
+                                        From
+                                    </th>
+
+                                    <th>
+                                        To
+                                    </th>
+
+                                    <th>
+                                        Start Date
+                                    </th>
+
+                                    <th>
+                                        End Date
+                                    </th>
+
+                                    <th>
+                                        Status
+                                    </th>
+
+                                    <th>
+                                        Created By
+                                    </th>
+
+                                    <th>
+                                        Reason
+                                    </th>
+
+                                    <th class="text-end">
+                                        Actions
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                {% for delegation in delegations_page %}
+
+                                    <tr>
+
+                                        <td>
+
+                                            <div class="fw-semibold">
+                                                {{ delegation.from_admin.display_name }}
+                                            </div>
+
+                                            <div class="small text-muted">
+                                                {{ delegation.from_admin.employee_id }}
+                                            </div>
+
+                                        </td>
+
+
+                                        <td>
+
+                                            <div class="fw-semibold">
+                                                {{ delegation.to_admin.display_name }}
+                                            </div>
+
+                                            <div class="small text-muted">
+                                                {{ delegation.to_admin.employee_id }}
+                                            </div>
+
+                                        </td>
+
+
+                                        <td>
+                                            {{ delegation.start_date|indian_date }}
+                                        </td>
+
+
+                                        <td>
+                                            {{ delegation.end_date|indian_date }}
+                                        </td>
+
+
+                                        <td>
+
+                                            {% if delegation.is_active %}
+
+                                                <span class="badge bg-success">
+                                                    Active
+                                                </span>
+
+                                            {% else %}
+
+                                                <span class="badge bg-secondary">
+                                                    Inactive
+                                                </span>
+
+                                            {% endif %}
+
+                                        </td>
+
+
+                                        <td>
+                                            {{ delegation.created_by.display_name }}
+                                        </td>
+
+
+                                        <td>
+
+                                            {% if delegation.reason %}
+
+                                                <span
+                                                    title="{{ delegation.reason }}"
+                                                >
+                                                    {{ delegation.reason|truncatechars:50 }}
+                                                </span>
+
+                                            {% else %}
+
+                                                <span class="text-muted">
+                                                    —
+                                                </span>
+
+                                            {% endif %}
+
+                                        </td>
+
+
+                                        <td class="text-end">
+
+                                            {% if delegation.is_active %}
+
+                                                <form
+                                                    method="post"
+                                                    action="{% url 'tasks:delegation-deactivate' task.pk delegation.pk %}"
+                                                    onsubmit="return confirm('Deactivate this delegation?');"
+                                                >
+
+                                                    {% csrf_token %}
+
+                                                    <button
+                                                        type="submit"
+                                                        class="btn btn-sm btn-outline-danger"
+                                                    >
+                                                        Deactivate
+                                                    </button>
+
+                                                </form>
+
+                                            {% else %}
+
+                                                <span class="text-muted small">
+                                                    No actions
+                                                </span>
+
+                                            {% endif %}
+
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                {% else %}
+
+                    <div class="text-center text-muted py-5">
+
+                        <div class="mb-2">
+                            No delegations have been recorded.
+                        </div>
+
+                        <a
+                            href="{% url 'tasks:delegation-create' task.pk %}"
+                            class="btn btn-sm btn-primary"
+                        >
+                            Create Delegation
+                        </a>
+
+                    </div>
+
+                {% endif %}
+
+                {% render_table_pagination delegations_page 'delegations_page' 'Task delegations' %}
+
+            {% endwith %}
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ===================================================== -->
+    <!-- SCHEDULER INFORMATION                                 -->
+    <!-- ===================================================== -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header bg-white">
+
+            <h5 class="mb-0">
+                Scheduler Information
+            </h5>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="alert alert-info mb-0">
+
+                <strong>Scheduler integration</strong>
+
+                <p class="mb-0 mt-1">
+
+                    Scheduler-specific information such as
+                    RUN_CONFIG, execution status, queue position,
+                    report date, retry information, and execution
+                    history will appear here once the scheduler
+                    integration layer is implemented.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ===================================================== -->
+    <!-- FOOTER ACTIONS                                        -->
+    <!-- ===================================================== -->
+
+    <div class="d-flex justify-content-between">
+
+        <a
+            href="{% url 'tasks:list' %}"
+            class="btn btn-outline-secondary"
+        >
+            Back to Tasks
+        </a>
+
+
+        <div class="d-flex gap-2">
+
+            <a
+                href="{% url 'tasks:edit' task.pk %}"
+                class="btn btn-primary"
+            >
+                Edit Task
+            </a>
+
+            <a
+                href="{% url 'tasks:delete' task.pk %}"
+                class="btn btn-outline-danger"
+            >
+                Delete Task
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

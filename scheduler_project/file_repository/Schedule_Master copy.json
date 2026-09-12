@@ -1,0 +1,734 @@
+[
+    {
+        "id": 1,
+        "name": "IBG_HEDGE_MASTER",
+        "package_name": "SCHEDULE_EXTRACTS.IBG_HEDGE_MASTER",
+        "run_config": {
+            "RUNS_ON": [
+                "DAILY"
+            ],
+            "RUN_BY": {
+                "FROM_TIME": "06:00",
+                "TO_TIME": "06:30"
+            },
+            "HOLIDAY_RUN": [
+                "SAT",
+                "SUN",
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T",
+        "same_day": 1,
+        "time_flag": 1,
+        "is_active": 1,
+        "created_date": "2026-09-07T14:23:15.591820",
+        "confirmation_needed": 0
+    },
+    {
+        "id": 2,
+        "name": "FTD_EXTRACT",
+        "package_name": "SCHEDULE_EXTRACTS.FTD_EXTRACT",
+        "run_config": {
+            "RUNS_ON": [
+                "DAILY"
+            ],
+            "RUN_BY": {
+                "FROM_TIME": "10:00",
+                "TO_TIME": "11:00"
+            },
+            "HOLIDAY_RUN": [
+                "SAT",
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T",
+        "same_day": 0,
+        "time_flag": 1,
+        "is_active": 1,
+        "created_date": "2026-09-07T14:26:07.537593",
+        "confirmation_needed": 0
+    },
+    {
+        "id": 3,
+        "name": "ITRP_DASHBOARD",
+        "package_name": "SCHEDULE_EXTRACTS.ITRP_DASHBOARD",
+        "run_config": {
+            "RUNS_ON": [
+                "DAILY"
+            ],
+            "RUN_BY": {
+                "FROM_TIME": "18:00",
+                "TO_TIME": "20:00"
+            },
+            "HOLIDAY_RUN": [
+                "SAT",
+                "SUN",
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T",
+        "same_day": 0,
+        "time_flag": 1,
+        "is_active": 1,
+        "created_date": "2026-09-07T14:27:46.752594",
+        "confirmation_needed": 0
+    },
+    {
+        "id": 4,
+        "name": "GPB",
+        "package_name": "SCHEDULE_EXTRACTS.GPB_EXTRACT",
+        "run_config": {
+            "RUNS_ON": [
+                "DAILY"
+            ],
+            "RUN_BY": {
+                "FROM_TIME": "16:00",
+                "TO_TIME": "22:00"
+            }
+        },
+        "margin": "T",
+        "same_day": 0,
+        "time_flag": 1,
+        "is_active": 1,
+        "created_date": "2026-09-07T14:30:13.822452",
+        "confirmation_needed": 0
+    },
+    {
+        "id": 5,
+        "name": "OPTION_WEEKLY_FRIDAY",
+        "package_name": "SCHEDULE_EXTRACTS.OPTION_WEEKLY_FRIDAY",
+        "run_config": {
+            "RUNS_ON": [
+                "WEEKLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T14:34:27.495607",
+        "confirmation_needed": 0
+    },
+    {
+        "id": 6,
+        "name": "OFCB_WEEKLY_FRIDAY",
+        "package_name": "SCHEDULE_EXTRACTS.OFCB_WEEKLY_FRIDAY",
+        "run_config": {
+            "RUNS_ON": [
+                "WEEKLY",
+                "FORTNIGHTLY",
+                "MONTHLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T14:36:03.984086",
+        "confirmation_needed": 0
+    },
+    {
+        "id": 8,
+        "name": "TLTRO_WEEKLY",
+        "package_name": "SCHEDULE_EXTRACTS.TLTRO_WEEKLY",
+        "run_config": {
+            "RUNS_ON": [
+                "WEEKLY",
+                "MONTHLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T14:48:54.859530",
+        "confirmation_needed": 1
+    },
+    {
+        "id": 9,
+        "name": "R7_RBI_WEEKLY",
+        "package_name": "SCHEDULE_EXTRACTS.R7_RBI_WEEKLY",
+        "run_config": {
+            "RUNS_ON": [
+                "WEEKLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T15:15:05.878191",
+        "confirmation_needed": 1
+    },
+    {
+        "id": 10,
+        "name": "MUREX_WEEKLY",
+        "package_name": "SCHEDULE_EXTRACTS.MUREX_WEEKLY",
+        "run_config": {
+            "RUNS_ON": [
+                "WEEKLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T15:18:38.882523",
+        "confirmation_needed": 1
+    },
+    {
+        "id": 11,
+        "name": "BAL_STATEMENT",
+        "package_name": "SCHEDULE_EXTRACTS.BAL_STATEMENT",
+        "run_config": {
+            "RUNS_ON": [
+                "FORTNIGHTLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T+4",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T15:22:02.700512",
+        "confirmation_needed": 1
+    },
+    {
+        "id": 12,
+        "name": "OVERNIGHT_LRA2",
+        "package_name": "SCHEDULE_EXTRACTS.OVERNIGHT_LRA2",
+        "run_config": {
+            "RUNS_ON": [
+                "FORTNIGHTLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T15:30:57.395409",
+        "confirmation_needed": 1
+    },
+    {
+        "id": 13,
+        "name": "SECURITY_INCOME_MONTHLY",
+        "package_name": "SCHEDULE_EXTRACTS.SECURITY_INCOME",
+        "run_config": {
+            "RUNS_ON": [
+                "MONTHLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T+3",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T15:54:36.016118",
+        "confirmation_needed": 0
+    },
+    {
+        "id": 14,
+        "name": "NONOPTION_DERIV",
+        "package_name": "SCHEDULE_EXTRACTS.NONOPTION_DERIV",
+        "run_config": {
+            "RUNS_ON": [
+                "MONTHLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T",
+        "same_day": 1,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T16:38:03.475436",
+        "confirmation_needed": 1
+    },
+    {
+        "id": 15,
+        "name": "OFSAA_ADDITIONAL_EXTRACTS",
+        "package_name": "SCHEDULE_EXTRACTS.OFSAA_ADDITIONAL_EXTRACTS",
+        "run_config": {
+            "RUNS_ON": [
+                "MONTHLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T+2",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T16:42:24.905035",
+        "confirmation_needed": 1
+    },
+    {
+        "id": 16,
+        "name": "Forex_Turnover",
+        "package_name": "SCHEDULE_EXTRACTS.Forex_Turnover",
+        "run_config": {
+            "RUNS_ON": [
+                "MONTHLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ],
+            "RUN_BY": {
+                "FROM_TIME": "16:00",
+                "TO_TIME": "22:00"
+            }
+        },
+        "margin": "T+1",
+        "same_day": 0,
+        "time_flag": 1,
+        "is_active": 1,
+        "created_date": "2026-09-07T19:00:34.875848",
+        "confirmation_needed": 1
+    },
+    {
+        "id": 17,
+        "name": "TLTRO_PSL",
+        "package_name": "SCHEDULE_EXTRACTS.TLTRO_PSL",
+        "run_config": {
+            "RUNS_ON": [
+                "MONTHLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T+2",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T19:06:41.739503",
+        "confirmation_needed": 0
+    },
+    {
+        "id": 18,
+        "name": "SCRTY_PPR",
+        "package_name": "SCHEDULE_EXTRACTS.SCRTY_PPR",
+        "run_config": {
+            "RUNS_ON": [
+                "MONTHLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ],
+            "RUN_BY": {
+                "FROM_TIME": "16:00",
+                "TO_TIME": "22:00"
+            }
+        },
+        "margin": "T+1",
+        "same_day": 0,
+        "time_flag": 1,
+        "is_active": 1,
+        "created_date": "2026-09-07T19:17:54.048356",
+        "confirmation_needed": 0
+    },
+    {
+        "id": 19,
+        "name": "DSB_REPORTS_EXTRACT",
+        "package_name": "SCHEDULE_EXTRACTS.DSB_REPORTS_EXTRACT",
+        "run_config": {
+            "RUNS_ON": [
+                "MONTHLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T+6",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T19:19:28.563715",
+        "confirmation_needed": 1
+    },
+    {
+        "id": 20,
+        "name": "LRA2_FOR_DWH",
+        "package_name": "SCHEDULE_EXTRACTS.LRA2_FOR_DWH",
+        "run_config": {
+            "RUNS_ON": [
+                "MONTHLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T19:24:40.021981",
+        "confirmation_needed": 1
+    },
+    {
+        "id": 21,
+        "name": "DAY_HIGH_EXTRACTS_FOR_DWH",
+        "package_name": "SCHEDULE_EXTRACTS.DAY_HIGH_EXTRACTS_FOR_DWH",
+        "run_config": {
+            "RUNS_ON": [
+                "MONTHLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T19:27:14.843217",
+        "confirmation_needed": 0
+    },
+    {
+        "id": 23,
+        "name": "MM07_EXTRACT",
+        "package_name": "SCHEDULE_EXTRACTS.MM07_EXTRACT",
+        "run_config": {
+            "RUNS_ON": [
+                "MONTHLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T19:45:30.584850",
+        "confirmation_needed": 1
+    },
+    {
+        "id": 24,
+        "name": "DSB_DERIVATIVES",
+        "package_name": "SCHEDULE_EXTRACTS.DSB_DERIVATIVES",
+        "run_config": {
+            "RUNS_ON": [
+                "MONTHLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T+6",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T19:46:16.719256",
+        "confirmation_needed": 0
+    },
+    {
+        "id": 29,
+        "name": "CAL",
+        "package_name": "SCHEDULE_EXTRACTS.CAL",
+        "run_config": {
+            "RUNS_ON": [
+                "MONTHLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T+2",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T19:51:08.993815",
+        "confirmation_needed": 0
+    },
+    {
+        "id": 30,
+        "name": "DEAL_3_EXTRACTS",
+        "package_name": "SCHEDULE_EXTRACTS.DEAL_3_EXTRACTS",
+        "run_config": {
+            "RUNS_ON": [
+                "MONTHLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T+5",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T19:57:06.349485",
+        "confirmation_needed": 0
+    },
+    {
+        "id": 31,
+        "name": "TRANCHE_2_EXTRACTS",
+        "package_name": "SCHEDULE_EXTRACTS.TRANCHE_2_EXTRACTS",
+        "run_config": {
+            "RUNS_ON": [
+                "MONTHLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T+5",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T19:59:10.378607",
+        "confirmation_needed": 0
+    },
+    {
+        "id": 32,
+        "name": "IBG_AGL_USD_MILLIONS",
+        "package_name": "SCHEDULE_EXTRACTS.IBG_AGL_USD_MILLIONS",
+        "run_config": {
+            "RUNS_ON": [
+                "QUARTERLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T+3",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T20:03:22.576095",
+        "confirmation_needed": 0
+    },
+    {
+        "id": 33,
+        "name": "BETA",
+        "package_name": "SCHEDULE_EXTRACTS.BETA",
+        "run_config": {
+            "RUNS_ON": [
+                "QUARTERLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T20:12:18.287373",
+        "confirmation_needed": 0
+    },
+    {
+        "id": 35,
+        "name": "KI_AUTOMATION",
+        "package_name": "SCHEDULE_EXTRACTS.KI_AUTOMATION",
+        "run_config": {
+            "RUNS_ON": [
+                "QUARTERLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T+6",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T20:26:02.247187",
+        "confirmation_needed": 0
+    },
+    {
+        "id": 37,
+        "name": "TRSRY_TLTRO_ANBC",
+        "package_name": "SCHEDULE_EXTRACTS.TRSRY_TLTRO_ANBC",
+        "run_config": {
+            "RUNS_ON": [
+                "QUARTERLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T+4",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T20:28:02.178407",
+        "confirmation_needed": 0
+    },
+    {
+        "id": 38,
+        "name": "MX_DERIVATIVES",
+        "package_name": "SCHEDULE_EXTRACTS.MX_DERIVATIVES",
+        "run_config": {
+            "RUNS_ON": [
+                "QUARTERLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T20:28:46.869473",
+        "confirmation_needed": 1
+    },
+    {
+        "id": 39,
+        "name": "MFX_FORWARD",
+        "package_name": "SCHEDULE_EXTRACTS.MFX_FORWARD",
+        "run_config": {
+            "RUNS_ON": [
+                "QUARTERLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T20:34:09.705297",
+        "confirmation_needed": 0
+    },
+    {
+        "id": 40,
+        "name": "SFG_TRREPS_DATA",
+        "package_name": "SCHEDULE_EXTRACTS.SFG_TRREPS_DATA",
+        "run_config": {
+            "RUNS_ON": [
+                "QUARTERLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T20:34:58.055292",
+        "confirmation_needed": 0
+    },
+    {
+        "id": 41,
+        "name": "FX_RETAIL",
+        "package_name": "SCHEDULE_EXTRACTS.FX_RETAIL",
+        "run_config": {
+            "RUNS_ON": [
+                "QUARTERLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T20:42:27.567413",
+        "confirmation_needed": 0
+    },
+    {
+        "id": 42,
+        "name": "STRESS_TEST_INCOME",
+        "package_name": "SCHEDULE_EXTRACTS.STRESS_TEST_INCOME",
+        "run_config": {
+            "RUNS_ON": [
+                "HALF-YEARLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T20:45:05.890251",
+        "confirmation_needed": 1
+    },
+    {
+        "id": 43,
+        "name": "STRESS_TEST_SENSITIVITY_SHOCK",
+        "package_name": "SCHEDULE_EXTRACTS.STRESS_TEST_SENSITIVITY_SHOCK",
+        "run_config": {
+            "RUNS_ON": [
+                "HALF-YEARLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T20:47:33.094605",
+        "confirmation_needed": 0
+    },
+    {
+        "id": 44,
+        "name": "STATEMENT_9",
+        "package_name": "SCHEDULE_EXTRACTS.STATEMENT_9",
+        "run_config": {
+            "RUNS_ON": [
+                "ANNUALLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T20:51:17.737071",
+        "confirmation_needed": 1
+    },
+    {
+        "id": 45,
+        "name": "BOTTOM_UP_STRESS_TEST",
+        "package_name": "SCHEDULE_EXTRACTS.BOTTOM_UP_STRESS_TEST",
+        "run_config": {
+            "RUNS_ON": [
+                "ANNUALLY"
+            ],
+            "HOLIDAY_RUN": [
+                "HOLIDAY"
+            ]
+        },
+        "margin": "T",
+        "same_day": 0,
+        "time_flag": 0,
+        "is_active": 1,
+        "created_date": "2026-09-07T20:55:38.589012",
+        "confirmation_needed": 1
+    }
+]

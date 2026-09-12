@@ -1,0 +1,3 @@
+# Office legacy driver profile; use Python 3.10 with a matching Oracle Client.
+-r requirements-base.txt
+cx-Oracle>=8.3,<9.0

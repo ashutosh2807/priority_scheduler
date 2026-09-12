@@ -1,0 +1,5 @@
+@echo off
+setlocal EnableExtensions
+REM Start the scheduler worker and SBI portal together. Arguments are forwarded.
+call "%~dp0scheduler_web\start_portal.bat" %*
+exit /b %ERRORLEVEL%

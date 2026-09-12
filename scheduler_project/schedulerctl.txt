@@ -1,0 +1,33 @@
+@echo off
+setlocal EnableExtensions
+
+REM Convenience launcher for operator_cli.py. Examples:
+REM   schedulerctl.bat status
+REM   schedulerctl.bat control 17 pause
+REM   schedulerctl.bat shell
+cd /d "%~dp0"
+
+set "PYTHON_EXE=%~dp0venv\Scripts\python.exe"
+call :validate_python
+if not defined PYTHON_EXE (
+    set "PYTHON_EXE=%~dp0..\.scheduler-venv\Scripts\python.exe"
+    call :validate_python
+)
+
+if defined PYTHON_EXE (
+    "%PYTHON_EXE%" "%~dp0operator_cli.py" %*
+) else (
+    echo Python environment unavailable. Run ..\setup_scheduler_environment.bat first.
+    exit /b 9009
+)
+
+exit /b %ERRORLEVEL%
+
+:validate_python
+if not exist "%PYTHON_EXE%" (
+    set "PYTHON_EXE="
+    exit /b 0
+)
+"%PYTHON_EXE%" -c "import sys" >nul 2>&1
+if errorlevel 1 set "PYTHON_EXE="
+exit /b 0

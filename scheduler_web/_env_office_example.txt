@@ -1,0 +1,12 @@
+# Local, loopback office installation. Use the approved HTTPS deployment
+# configuration for a shared network server.
+DJANGO_SECRET_KEY=replace-with-an-office-only-random-secret
+DJANGO_DEBUG=1
+DJANGO_ALLOWED_HOSTS=127.0.0.1,localhost
+SCHEDULER_PROJECT_PATH=../scheduler_project
+DJANGO_DATABASE_PATH=runtime/office/portal.sqlite3
+SCHEDULER_API_BASE_URL=http://127.0.0.1:8091
+SCHEDULER_API_TOKEN=replace-with-the-same-office-token-as-the-worker
+SCHEDULER_API_TIMEOUT_SECONDS=3
+SCHEDULER_PORTAL_AUDIT_AUTOSTART=1
+SCHEDULER_ALLOW_LOCAL_READ_FALLBACK=0

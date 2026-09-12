@@ -1,0 +1,2 @@
+# Default home profile. Office installs requirements-cx-oracle.txt instead.
+-r requirements-oracledb.txt

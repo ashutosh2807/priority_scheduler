@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Delete {{ schedule.name }}{% endblock %}
+{% block content %}
+<a class="small text-decoration-none" href="{% url 'scheduler:detail' schedule.id %}"><i class="bi bi-arrow-left me-1"></i>Back to schedule</a>
+<div class="page-eyebrow mt-3">ITRP schedule management</div><h1 class="page-title h2">Delete schedule</h1>
+<p class="page-subtitle">{{ schedule.name }} · #{{ schedule.id }}</p>
+<div class="row mt-4"><div class="col-lg-8 col-xl-6"><section class="card"><div class="card-body p-4">
+  <p>This removes the schedule and its waiting queue entries. Execution history, work logs and audit records remain available. A running schedule must finish before it can be deleted.</p>
+  {% if not configuration_available %}<div class="alert alert-warning">Reconnect the scheduler before deleting this schedule.</div>{% endif %}
+  <form method="post" data-disable-on-submit>{% csrf_token %}
+    {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+    <div class="mb-3">{% include "scheduler/_definition_field.html" with field=form.confirm_name %}</div>
+    <div class="mb-4">{% include "scheduler/_definition_field.html" with field=form.reason %}</div>
+    <div class="d-flex justify-content-end gap-2"><a class="btn btn-light border" href="{% url 'scheduler:detail' schedule.id %}">Keep schedule</a><button type="submit" class="btn btn-danger" {% if not configuration_available %}disabled{% endif %}>Delete schedule</button></div>
+  </form>
+</div></section></div></div>
+{% endblock %}
